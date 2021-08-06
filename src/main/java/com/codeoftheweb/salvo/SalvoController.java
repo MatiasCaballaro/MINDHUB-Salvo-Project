@@ -19,12 +19,12 @@ public class SalvoController {
     public List<Game> getAll() {
         return gameRepository.findAll();
     }*/
-
+/*
     @RequestMapping("/games")
     public List<Game> getAll(Set<Game> gameId) {
-        return Game.stream().map(Person::getLastName).collect(Collectors::toList);
+        return gameID.stream().map(Person::getLastName).collect(Collectors::toList);
     }
-
+*/
 
     /*List<String> getLastNames(Set<Person> people) {
         return people.stream().map(Person::getLastName).collect(Collectors::toList);
