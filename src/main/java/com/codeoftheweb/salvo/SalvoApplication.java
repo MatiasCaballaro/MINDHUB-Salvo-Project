@@ -22,7 +22,7 @@ public class SalvoApplication {
 	@Bean
 	public CommandLineRunner initData(PlayerRepository playerRepository, GameRepository gameRepository, GamePlayerRepository gamePlayerRepository) {
 		return (args) -> {
-			// forzado de grabación players
+			// forzado de grabación players de acuerdo al constructor en Player.java
 			Player player1 = new Player("j.bauer@ctu.gov");
 			Player player2 = new Player("c.obrian@ctu.gov");
 			Player player3 = new Player("t.almeida@ctu.gov");
@@ -33,7 +33,7 @@ public class SalvoApplication {
 			playerRepository.save(player4);
 
 
-			// forzado de grabación games
+			// forzado de grabación games de acuerdo al constructor en Game.java
 			Game game1 = new Game(LocalDateTime.now());
 			Game game2 = new Game(LocalDateTime.now().plusHours(1));
 			Game game3 = new Game(LocalDateTime.now().plusHours(2));
@@ -47,7 +47,7 @@ public class SalvoApplication {
 			gameRepository.save(game5);
 			gameRepository.save(game6);
 
-			//forzado grabación gameplayers
+			//forzado grabación gameplayers de acuerdo al constructor en GamePlayer.java
 			GamePlayer gameplayer1 = new GamePlayer (LocalDateTime.now(), player1, game1 );
 			GamePlayer gameplayer2 = new GamePlayer (LocalDateTime.now(), player2, game1 );
 			GamePlayer gameplayer3 = new GamePlayer (LocalDateTime.now().plusHours(1), player1, game2 );
