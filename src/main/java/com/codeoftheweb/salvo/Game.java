@@ -16,6 +16,7 @@ import static java.util.stream.Collectors.toList;
 public class Game {
 
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
@@ -62,6 +63,7 @@ public class Game {
     public List<Player> getPlayers() {
         return gamePlayers.stream().map(sub -> sub.getPlayerID()).collect(toList());
     }
+
 
 }
 
