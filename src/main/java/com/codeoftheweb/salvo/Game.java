@@ -31,7 +31,7 @@ public class Game {
 
 
 
-
+    //CONSTRUCTORES
     public Game() { }
 
     public Game(LocalDateTime creationDate) {
@@ -39,6 +39,7 @@ public class Game {
     }
 
 
+    // GETTER Y SETTER
     public long getId() {
         return id;
     }
@@ -59,6 +60,9 @@ public class Game {
         this.gamePlayers = gameplayers;
     }
 
+
+
+    // LISTA PLAYER PARA GAME
     @JsonIgnore
     public List<Player> getPlayers() {
         return gamePlayers.stream().map(sub -> sub.getPlayerID()).collect(toList());

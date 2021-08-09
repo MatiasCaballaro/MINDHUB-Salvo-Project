@@ -1,6 +1,6 @@
 package com.codeoftheweb.salvo;
 
-        import com.fasterxml.jackson.annotation.JsonIgnore;
+
         import org.hibernate.annotations.GenericGenerator;
 
         import javax.persistence.*;
@@ -20,16 +20,21 @@ public class Player {
     private long id;
     private String userName;
 
+    @OneToMany(mappedBy="playerID", fetch=FetchType.EAGER)
+    Set<GamePlayer> gamePlayers= new HashSet<>();
+
+
+    //CONSTRUCTORES
     public Player() { }
 
     public Player(String userName) {
         this.userName = userName;
     }
 
-    @OneToMany(mappedBy="playerID", fetch=FetchType.EAGER)
-    Set<GamePlayer> gamePlayers= new HashSet<>();
 
 
+
+    // GETTER Y SETTER
     public long getId() {
         return id;
     }
@@ -47,15 +52,22 @@ public class Player {
         GamePlayer.add(gamePlayer);
     }
 
+    public Set<GamePlayer> getGamePlayers() {
+        return gamePlayers;
+    }
 
-    //public List<Magazine> getMagazines() {
-    //    return subscriptions.stream().map(sub -> sub.getMagazine()).collect(toList());
-    //  }
+    public void setGamePlayers(Set<GamePlayer> gamePlayers) {
+        this.gamePlayers = gamePlayers;
+    }
 
 
+
+
+    // LISTA GAME PARA PLAYER
     public List<Game> getGames() {
         return gamePlayers.stream().map(sub -> sub.getGameID()).collect(toList());
     }
+
 
 
 }

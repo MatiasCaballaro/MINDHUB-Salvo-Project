@@ -5,6 +5,8 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Entity
 public class GamePlayer {
@@ -26,7 +28,8 @@ public class GamePlayer {
 
 
 
-    // Consturctores
+
+    //CONSTRUCTORES
     public GamePlayer() { }
 
     public GamePlayer(LocalDateTime joinDate, Player playerID, Game gameID) {
@@ -35,13 +38,13 @@ public class GamePlayer {
         this.gameID = gameID;
     }
 
-                        /* se agrega automáticamente el Date
-                        public GamePlayer(Player playerID, Game gameID) {
-                            this.joinDate = new Date();
-                            this.playerID = playerID;
-                            this.gameID = gameID;
-                        }
-                        */
+    /* se agrega automáticamente el Date
+    public GamePlayer(Player playerID, Game gameID) {
+        this.joinDate = new Date();
+        this.playerID = playerID;
+        this.gameID = gameID;
+    }
+    */
 
 
 
@@ -78,6 +81,8 @@ public class GamePlayer {
     public void setGameID(Game gameID) {
         this.gameID = gameID;
     }
+
+
 
 
 }

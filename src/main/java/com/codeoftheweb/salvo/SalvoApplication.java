@@ -56,8 +56,8 @@ public class SalvoApplication {
 			GamePlayer gameplayer6 = new GamePlayer (LocalDateTime.now().plusHours(2), player3, game3 );
 			GamePlayer gameplayer7 = new GamePlayer (LocalDateTime.now().plusHours(3), player1, game4 );
 			GamePlayer gameplayer8 = new GamePlayer (LocalDateTime.now().plusHours(3), player2, game4 );
-			GamePlayer gameplayer9 = new GamePlayer (LocalDateTime.now().plusHours(4), player3, game5 );
-			GamePlayer gameplayer10 = new GamePlayer (LocalDateTime.now().plusHours(4), player1, game5 );
+			GamePlayer gameplayer9 = new GamePlayer (LocalDateTime.now().plusHours(4), player1, game5 );
+			GamePlayer gameplayer10 = new GamePlayer (LocalDateTime.now().plusHours(4), player3, game5 );
 			GamePlayer gameplayer11 = new GamePlayer (LocalDateTime.now().plusHours(5), player4, game6 );
 			gamePlayerRepository.save(gameplayer1);
 			gamePlayerRepository.save(gameplayer2);
