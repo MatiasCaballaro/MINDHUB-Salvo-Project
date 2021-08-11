@@ -1,6 +1,7 @@
 package com.codeoftheweb.salvo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,6 +19,12 @@ public class SalvoController {
 
     @Autowired
     private GameRepository gameRepository;
+
+    @Autowired
+    private GamePlayerRepository gamePlayerRepository;
+
+    @Autowired
+    private ShipRepository shipRepository;
 
 
 
@@ -93,6 +100,11 @@ public class SalvoController {
                 game.getGameplayers()
                         .stream()
                         .map(gamePlayer -> makeGamePlayerDTO(gamePlayer)).collect(Collectors.toList()));
+        //acá
+        /*dto.put("ships", game.getGameplayers().stream()
+                .map (gamePlayer -> gamePlayer.getShips().stream()
+                        .map(ship -> makeShipDTO(ship)).collect(Collectors.toList())));*/
+
         return dto;
 
     }
@@ -116,6 +128,58 @@ public class SalvoController {
     }
 
 
+    // game_view toma Id de gameplayer y hace un objeto Game con todos los datos requeridos
+    // la url sería /api/game_view/nn donde nn es la variable
+    /*
+    @RequestMapping("/game_view/{nn}" )
+    public Map <String, Object> findGame(@PathVariable Long nn) {
+        GamePlayer gamePlayer = gamePlayerRepository.getById(nn);
+        return makeGameDTO(gamePlayer.getGameID());
+    }*/
+
+
+    /*
+    // PRUEBA LISTA SHIPS
+    @RequestMapping("/game_view/{nn}" )
+    public Map <String, Object> findGame(@PathVariable Long nn) {
+        GamePlayer gamePlayer = gamePlayerRepository.getById(nn);
+        return makeShipDTO(shipRepository.getById(gamePlayer.getId()));
+    }*/
+
+
+
+    @RequestMapping("/game_view/{nn}" )
+    public Map <String, Object> findGame(@PathVariable Long nn) {
+        GamePlayer gamePlayer = gamePlayerRepository.getById(nn);
+        return makeGameViewDTO(gamePlayer);
+    }
+
+
+
+
+    // Game_view DTO game
+    private Map<String, Object> makeGameViewDTO(GamePlayer gamePlayer) {
+             Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("id", gamePlayer.getGameID().getId());
+        dto.put("created", gamePlayer.getGameID().getCreationDate());
+        dto.put("gamePlayers",
+                gamePlayer.getGameID().getGameplayers()
+                        .stream()
+                        .map(gamePlayer1 -> makeGamePlayerDTO(gamePlayer1)).collect(Collectors.toList()));
+        dto.put("ships", gamePlayer.getShips().stream()
+                        .map(ship -> makeShipDTO(ship)).collect(Collectors.toList()));
+        return dto;
+    }
+
+
+
+    // ShipDTO
+    private Map<String, Object> makeShipDTO(Ship ship) {
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("type", ship.getShipType());
+        dto.put("locations", ship.getLocations());
+        return dto;
+    }
 
 
 

@@ -3,8 +3,8 @@ package com.codeoftheweb.salvo;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Ship {
@@ -14,12 +14,18 @@ public class Ship {
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
 
+    private String shipType;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="gamePlayerID")
-    private GamePlayer gameplayerID;
+    private GamePlayer gamePlayerID;
 
-    @OneToMany(mappedBy="shipID", fetch=FetchType.EAGER)
-    Set<ShipLocations> shipLocations = new HashSet<>();
+
+    @ElementCollection
+    @Column(name="location")
+    private List<String> locations = new ArrayList<>();
+
+
 
     // CONSTRUCTORES
 
@@ -27,11 +33,11 @@ public class Ship {
     public Ship() {
     }
 
-    public Ship(long id, GamePlayer gameplayerID) {
-        this.id = id;
-        this.gameplayerID = gameplayerID;
+    public Ship(String shipType, GamePlayer gamePlayerID, List<String> locations) {
+        this.shipType = shipType;
+        this.gamePlayerID = gamePlayerID;
+        this.locations = locations;
     }
-
 
 
     // SETTERS Y GETTERS
@@ -45,20 +51,28 @@ public class Ship {
         this.id = id;
     }
 
-    public GamePlayer getGameplayerID() {
-        return gameplayerID;
+    public String getShipType() {
+        return shipType;
     }
 
-    public void setGameplayerID(GamePlayer gameplayerID) {
-        this.gameplayerID = gameplayerID;
+    public void setShipType(String shipType) {
+        this.shipType = shipType;
     }
 
-    public Set<ShipLocations> getShipLocations() {
-        return shipLocations;
+    public GamePlayer getGamePlayerID() {
+        return gamePlayerID;
     }
 
-    public void setShipLocations(Set<ShipLocations> shipLocations) {
-        this.shipLocations = shipLocations;
+    public void setGamePlayerID(GamePlayer gamePlayerID) {
+        this.gamePlayerID = gamePlayerID;
+    }
+
+    public List<String> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(List<String> locations) {
+        this.locations = locations;
     }
 
 
