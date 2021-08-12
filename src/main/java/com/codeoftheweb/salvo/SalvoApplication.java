@@ -13,6 +13,7 @@ import java.util.Date;
 @SpringBootApplication
 public class SalvoApplication {
 
+	//Iniciador del proyecto
 	public static void main(String[] args) {
 		SpringApplication.run(SalvoApplication.class, args);
 	}
@@ -73,14 +74,14 @@ public class SalvoApplication {
 			gamePlayerRepository.save(gameplayer11);
 
 			// forzado grabación Ships
-			Ship ship1 = new Ship ("Destructor", gameplayer1, Arrays.asList("A2","A3"));
-			Ship ship2 = new Ship ("Portaaviones", gameplayer1, Arrays.asList("B1","B2","B3","B4"));
-			Ship ship3 = new Ship ("Submarino", gameplayer2, Arrays.asList("C2","C3","C4"));
-			Ship ship4 = new Ship ("Portaaviones", gameplayer2, Arrays.asList("D1","D2","D3","D4"));
-			Ship ship5 = new Ship ("Fragata", gameplayer3, Arrays.asList("B1"));
-			Ship ship6 = new Ship ("Submarino", gameplayer3, Arrays.asList("C2","C3","C4"));
-			Ship ship7 = new Ship ("Destructor", gameplayer4, Arrays.asList("A2","A3"));
-			Ship ship8 = new Ship ("Portaaviones", gameplayer4, Arrays.asList("B1","B2","B3","B4"));
+			Ship ship1 = new Ship ("Destroyer", gameplayer1, Arrays.asList("A2","A3"));
+			Ship ship2 = new Ship ("Submarine", gameplayer1, Arrays.asList("B1","B2","B3"));
+			Ship ship3 = new Ship ("Patrol Boat", gameplayer2, Arrays.asList("C2"));
+			Ship ship4 = new Ship ("Submarine", gameplayer2, Arrays.asList("D1","E1","F1"));
+			Ship ship5 = new Ship ("Patrol Boat", gameplayer3, Arrays.asList("B1"));
+			Ship ship6 = new Ship ("Submarine", gameplayer3, Arrays.asList("C2","C3","C4"));
+			Ship ship7 = new Ship ("Destructor", gameplayer4, Arrays.asList("A2","B2"));
+			Ship ship8 = new Ship ("Submarine", gameplayer4, Arrays.asList("E1","E2","E3"));
 			shipRepository.save(ship1);
 			shipRepository.save(ship2);
 			shipRepository.save(ship3);

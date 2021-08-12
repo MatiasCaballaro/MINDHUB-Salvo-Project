@@ -13,18 +13,20 @@ package com.codeoftheweb.salvo;
 @Entity
 public class Player {
 
-
+    // Genera clave ID con secuencia automática
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
+
+    // Genera variable String
     private String userName;
 
     @OneToMany(mappedBy="playerID", fetch=FetchType.EAGER)
     Set<GamePlayer> gamePlayers= new HashSet<>();
 
 
-    //CONSTRUCTORES
+    //CONSTRUCTORES - DEBE indicar constructor vacío y otro con los argumentos
     public Player() { }
 
     public Player(String userName) {

@@ -16,11 +16,13 @@ import static java.util.stream.Collectors.toList;
 public class Game {
 
 
-
+    // Genera clave ID con secuencia automática
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
+
+    // Genera variable String
     private LocalDateTime creationDate;
 
 

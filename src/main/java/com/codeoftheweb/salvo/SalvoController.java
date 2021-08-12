@@ -100,11 +100,6 @@ public class SalvoController {
                 game.getGameplayers()
                         .stream()
                         .map(gamePlayer -> makeGamePlayerDTO(gamePlayer)).collect(Collectors.toList()));
-        //acá
-        /*dto.put("ships", game.getGameplayers().stream()
-                .map (gamePlayer -> gamePlayer.getShips().stream()
-                        .map(ship -> makeShipDTO(ship)).collect(Collectors.toList())));*/
-
         return dto;
 
     }
@@ -165,7 +160,7 @@ public class SalvoController {
         dto.put("gamePlayers",
                 gamePlayer.getGameID().getGameplayers()
                         .stream()
-                        .map(gamePlayer1 -> makeGamePlayerDTO(gamePlayer1)).collect(Collectors.toList()));
+                        .map(gp -> makeGamePlayerDTO(gp)).collect(Collectors.toList()));
         dto.put("ships", gamePlayer.getShips().stream()
                         .map(ship -> makeShipDTO(ship)).collect(Collectors.toList()));
         return dto;
