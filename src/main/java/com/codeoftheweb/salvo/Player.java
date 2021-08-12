@@ -22,7 +22,7 @@ public class Player {
     // Genera variable String
     private String userName;
 
-    @OneToMany(mappedBy="playerID", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy="player", fetch=FetchType.EAGER)
     Set<GamePlayer> gamePlayers= new HashSet<>();
 
 
@@ -50,7 +50,7 @@ public class Player {
     }
 
     public void addGameplayer(GamePlayer gamePlayer) {
-        gamePlayer.setPlayerID(this);
+        gamePlayer.setPlayer(this);
         GamePlayer.add(gamePlayer);
     }
 
@@ -67,7 +67,7 @@ public class Player {
 
     // LISTA GAME PARA PLAYER
     public List<Game> getGames() {
-        return gamePlayers.stream().map(sub -> sub.getGameID()).collect(toList());
+        return gamePlayers.stream().map(sub -> sub.getGame()).collect(toList());
     }
 
 

@@ -5,13 +5,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.persistence.Id;
-
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
 
 @RestController
 @RequestMapping("/api")
@@ -110,7 +105,7 @@ public class SalvoController {
     public Map<String, Object> makeGamePlayerDTO(GamePlayer gamePlayer) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", gamePlayer.getId());
-        dto.put("player", makePlayerDTO(gamePlayer.getPlayerID()));
+        dto.put("player", makePlayerDTO(gamePlayer.getPlayer()));
         return dto;
     }
 
@@ -155,10 +150,10 @@ public class SalvoController {
     // Game_view DTO game
     private Map<String, Object> makeGameViewDTO(GamePlayer gamePlayer) {
              Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("id", gamePlayer.getGameID().getId());
-        dto.put("created", gamePlayer.getGameID().getCreationDate());
+        dto.put("id", gamePlayer.getGame().getId());
+        dto.put("created", gamePlayer.getGame().getCreationDate());
         dto.put("gamePlayers",
-                gamePlayer.getGameID().getGameplayers()
+                gamePlayer.getGame().getGameplayers()
                         .stream()
                         .map(gp -> makeGamePlayerDTO(gp)).collect(Collectors.toList()));
         dto.put("ships", gamePlayer.getShips().stream()

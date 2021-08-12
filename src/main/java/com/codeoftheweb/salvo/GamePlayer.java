@@ -18,16 +18,16 @@ public class GamePlayer {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="player_id")
-    private Player playerID;
+    private Player player;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="game_id")
-    private Game gameID;
+    private Game game;
 
 
     // SHIPS
 
-    @OneToMany(mappedBy="gamePlayerID", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy="gamePlayer", fetch=FetchType.EAGER)
     Set<Ship> ships = new HashSet<>();
 
 
@@ -36,11 +36,17 @@ public class GamePlayer {
 
     public GamePlayer(LocalDateTime joinDate, Player playerID, Game gameID) {
         this.joinDate = joinDate;
-        this.playerID = playerID;
-        this.gameID = gameID;
+        this.player = playerID;
+        this.game = gameID;
     }
 
-    /* se agrega automáticamente el Date
+
+    public static void add(GamePlayer gamePlayer) {
+    }
+
+
+
+    /* EJEMPLO - Constructor se agrega automáticamente el Date
     public GamePlayer(Player playerID, Game gameID) {
         this.joinDate = new Date();
         this.playerID = playerID;
@@ -49,9 +55,6 @@ public class GamePlayer {
     */
 
 
-
-    public static void add(GamePlayer gamePlayer) {
-    }
 
 
     // Getter y Setter
@@ -68,20 +71,20 @@ public class GamePlayer {
         this.joinDate = joinDate;
     }
 
-    public Player getPlayerID() {
-        return playerID;
+    public Player getPlayer() {
+        return player;
     }
 
-    public void setPlayerID(Player playerID) {
-        this.playerID = playerID;
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
-    public Game getGameID() {
-        return gameID;
+    public Game getGame() {
+        return game;
     }
 
-    public void setGameID(Game gameID) {
-        this.gameID = gameID;
+    public void setGame(Game game) {
+        this.game = game;
     }
 
 
