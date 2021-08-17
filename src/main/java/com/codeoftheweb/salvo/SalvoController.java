@@ -158,9 +158,17 @@ public class SalvoController {
                         .map(gp -> makeGamePlayerDTO(gp)).collect(Collectors.toList()));
         dto.put("ships", gamePlayer.getShips().stream()
                         .map(ship -> makeShipDTO(ship)).collect(Collectors.toList()));
-        dto.put("salvoes", gamePlayer.getGame().getGameplayers().stream()
-                        .map(gamePlayerSalvos -> gamePlayerSalvos.getSalvos().stream()
-                                .map(salvo -> makeSalvoDTO(salvo)).collect(Collectors.toList())));
+
+        //flatMap
+        /*dto.put("salvoes", gamePlayer.getGame().getGameplayers().stream()
+                        .flatMap(gamePlayerSalvos -> gamePlayerSalvos.getSalvos().stream()
+                                .map(salvo -> makeSalvoDTO(salvo))).collect(Collectors.toList()));*/
+
+        //flatMap usando forEach - PROBAR
+        /*dto.put("salvoes", gamePlayer.getGame().getGameplayers().stream()
+                        .flatMap(gamePlayerSalvos -> gamePlayerSalvos.getSalvos().stream()
+                                .map(salvo -> makeSalvoDTO(salvo))).collect(Collectors.toList()));*/
+
 
     return dto;
     }
@@ -175,7 +183,7 @@ public class SalvoController {
     }
 
 
-    @RequestMapping("/salvos")
+    @RequestMapping("/salvoes")
     public List<Object> listaSalvos() {
         return salvoRepository
                 .findAll()
@@ -192,8 +200,6 @@ public class SalvoController {
         dto.put("locations", salvo.getLocations());
         return dto;
     }
-
-
 
 
 
