@@ -22,7 +22,12 @@ public class SalvoApplication {
 	// Se crean instancias de cada objeto de acuerdo al modelo de constructo (argumentos)
 	// Se guardan con save indicando el repositorio y la nueva instancia a guardar
 	@Bean
-	public CommandLineRunner initData(PlayerRepository playerRepository, GameRepository gameRepository, GamePlayerRepository gamePlayerRepository, ShipRepository shipRepository) {
+	public CommandLineRunner initData(PlayerRepository playerRepository,
+									  GameRepository gameRepository,
+									  GamePlayerRepository gamePlayerRepository,
+									  ShipRepository shipRepository,
+									  SalvoRepository salvoRepository	) {
+
 		return (args) -> {
 			// forzado de grabación players de acuerdo al constructor en Player.java
 			Player player1 = new Player("j.bauer@ctu.gov");
@@ -90,6 +95,19 @@ public class SalvoApplication {
 			shipRepository.save(ship6);
 			shipRepository.save(ship7);
 			shipRepository.save(ship8);
+
+			// forzado grabación Salvo
+
+			Salvo salvo1 = new Salvo(gameplayer1,1,Arrays.asList("A1", "A2"));
+			Salvo salvo2 = new Salvo(gameplayer2,1,Arrays.asList("B1","B3"));
+			Salvo salvo3 = new Salvo(gameplayer1,2,Arrays.asList("A3","A4"));
+			Salvo salvo4 = new Salvo(gameplayer2,2,Arrays.asList("B5","B4"));
+
+			salvoRepository.save(salvo1);
+			salvoRepository.save(salvo2);
+			salvoRepository.save(salvo3);
+			salvoRepository.save(salvo4);
+
 		};
 	}
 
