@@ -24,7 +24,6 @@ public class Salvo {
     @ElementCollection
     @Column(name="location")
     private List<String> locations = new ArrayList<>();
-    //private List<String> locations = new ArrayList<>();
 
     //CONSTRUCTORES
 

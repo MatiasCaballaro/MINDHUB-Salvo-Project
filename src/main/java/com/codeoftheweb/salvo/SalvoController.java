@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -22,7 +23,7 @@ public class SalvoController {
     private ShipRepository shipRepository;
 
     @Autowired
-    private  SalvoRepository salvoRepository;
+    private SalvoRepository salvoRepository;
 
      /* // DEVUELVE UN SOLO VALOR FORZADO
 
@@ -137,19 +138,17 @@ public class SalvoController {
     }*/
 
 
-    @RequestMapping("/game_view/{nn}" )
-    public Map <String, Object> findGame(@PathVariable Long nn) {
+    @RequestMapping("/game_view/{nn}")
+    public Map<String, Object> findGame(@PathVariable Long nn) {
         GamePlayer gamePlayer = gamePlayerRepository.getById(nn);
         return makeGameViewDTO(gamePlayer);
     }
 
 
-
-
     // Game_view DTO game
     // Utiliza Ships DTO
     private Map<String, Object> makeGameViewDTO(GamePlayer gamePlayer) {
-             Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", gamePlayer.getGame().getId());
         dto.put("created", gamePlayer.getGame().getCreationDate());
         dto.put("gamePlayers",
@@ -157,19 +156,47 @@ public class SalvoController {
                         .stream()
                         .map(gp -> makeGamePlayerDTO(gp)).collect(Collectors.toList()));
         dto.put("ships", gamePlayer.getShips().stream()
-                        .map(ship -> makeShipDTO(ship)).collect(Collectors.toList()));
+                .map(ship -> makeShipDTO(ship)).collect(Collectors.toList()));
 
-        //flatMap
-        /*dto.put("salvoes", gamePlayer.getGame().getGameplayers().stream()
+        // Se utiliza Flat Map, que a diferencia del map, resuelve (aplana) los arrays en un solo nivel
+        dto.put("salvoes", gamePlayer.getGame().getGameplayers().stream()
                         .flatMap(gamePlayerSalvos -> gamePlayerSalvos.getSalvos().stream()
-                                .map(salvo -> makeSalvoDTO(salvo))).collect(Collectors.toList()));*/
+                                .map(salvo -> makeSalvoDTO(salvo))).collect(Collectors.toList()));
 
-        //flatMap usando forEach - PROBAR
-        /*dto.put("salvoes", gamePlayer.getGame().getGameplayers().stream()
-                        .flatMap(gamePlayerSalvos -> gamePlayerSalvos.getSalvos().stream()
-                                .map(salvo -> makeSalvoDTO(salvo))).collect(Collectors.toList()));*/
+        // Usando For
+        /*
+        List<Map<String, Object>> listaux = new  ArrayList<>();
+
+                // "Gameplayer gp" es el nombre que va a tener cada recorrido >
+                // dentro de lo que va a la derecha de los ":"
+                // ,al igual que "Salvo s"
+
+        for (GamePlayer gp: gamePlayer.getGame().gamePlayers) {
+            for (Salvo s:gp.getSalvos()){
+                listaux.add(makeSalvoDTO(s));
+            }
+        }
+        dto.put("salvoes2", listaux);
+        */
+
+                    // Usando forEach - PROBAR intento 1
+                    /*List<List<Integer>> listabidimensional = new ArrayList<List<Integer>>(Arrays.asList(
+                            new ArrayList<Integer>(Arrays.asList(1,2)),
+                            new ArrayList<Integer>(Arrays.asList(3,4))
+                    ));
+                    System.out.println(listabidimensional);
+                    List<Integer> listaAux = new ArrayList<>();
+                    for (List<Integer> l1:listabidimensional){
+                        for(Integer l2:l1){
+                            listaAux.add(l2);
+                        }
+                    }
+                    dto.put("salvoes2", listaAux);*/
 
 
+
+
+        
     return dto;
     }
 
@@ -196,7 +223,7 @@ public class SalvoController {
     private Map<String, Object> makeSalvoDTO(Salvo salvo) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("turn", salvo.getTurn());
-        dto.put("Player", salvo.getGamePlayer().getId());
+        dto.put("player", salvo.getGamePlayer().getPlayer().getId());
         dto.put("locations", salvo.getLocations());
         return dto;
     }

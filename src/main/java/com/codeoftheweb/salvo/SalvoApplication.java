@@ -6,8 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 
 @SpringBootApplication
@@ -17,6 +19,7 @@ public class SalvoApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SalvoApplication.class, args);
 	}
+
 
 	// Se agregan todos los repositorios en init data.
 	// Se crean instancias de cada objeto de acuerdo al modelo de constructo (argumentos)
@@ -79,14 +82,15 @@ public class SalvoApplication {
 			gamePlayerRepository.save(gameplayer11);
 
 			// forzado grabación Ships
-			Ship ship1 = new Ship ("Destroyer", gameplayer1, Arrays.asList("A2","A3"));
-			Ship ship2 = new Ship ("Submarine", gameplayer1, Arrays.asList("B1","B2","B3"));
-			Ship ship3 = new Ship ("Patrol Boat", gameplayer2, Arrays.asList("C2"));
-			Ship ship4 = new Ship ("Submarine", gameplayer2, Arrays.asList("D1","E1","F1"));
-			Ship ship5 = new Ship ("Patrol Boat", gameplayer3, Arrays.asList("B1"));
+			Ship ship1 = new Ship ("Destroyer", gameplayer1, Arrays.asList("A2","A3","A4"));
+			Ship ship2 = new Ship ("Submarine", gameplayer1, Arrays.asList("C1","C2","C3"));
+			Ship ship3 = new Ship ("Patrol Boat", gameplayer2, Arrays.asList("C2","D2"));
+			Ship ship4 = new Ship ("Submarine", gameplayer2, Arrays.asList("A2","A3","A4"));
+			Ship ship5 = new Ship ("Patrol Boat", gameplayer1, Arrays.asList("G8","H8"));
 			Ship ship6 = new Ship ("Submarine", gameplayer3, Arrays.asList("C2","C3","C4"));
-			Ship ship7 = new Ship ("Destructor", gameplayer4, Arrays.asList("A2","B2"));
-			Ship ship8 = new Ship ("Submarine", gameplayer4, Arrays.asList("E1","E2","E3"));
+			Ship ship7 = new Ship ("Destroyer", gameplayer4, Arrays.asList("A2","B2"));
+			Ship ship8 = new Ship ("Carrier", gameplayer1, Arrays.asList("E1","E2","E3","E4","E5"));
+			Ship ship9 = new Ship ("Battleship", gameplayer1, Arrays.asList("G2","H2","I2","J2"));
 			shipRepository.save(ship1);
 			shipRepository.save(ship2);
 			shipRepository.save(ship3);
@@ -95,18 +99,24 @@ public class SalvoApplication {
 			shipRepository.save(ship6);
 			shipRepository.save(ship7);
 			shipRepository.save(ship8);
+			shipRepository.save(ship9);
+
 
 			// forzado grabación Salvo
 
 			Salvo salvo1 = new Salvo(gameplayer1,1,Arrays.asList("A1", "A2"));
-			Salvo salvo2 = new Salvo(gameplayer2,1,Arrays.asList("B1","B3"));
-			Salvo salvo3 = new Salvo(gameplayer1,2,Arrays.asList("A3","A4"));
-			Salvo salvo4 = new Salvo(gameplayer2,2,Arrays.asList("B5","B4"));
+			Salvo salvo2 = new Salvo(gameplayer2,1,Arrays.asList("D1","D3"));
+			Salvo salvo3 = new Salvo(gameplayer1,2,Arrays.asList("A5","B5"));
+			Salvo salvo4 = new Salvo(gameplayer2,2,Arrays.asList("F5","F4"));
+			Salvo salvo5 = new Salvo(gameplayer3,1,Arrays.asList("G5","G4"));
+			Salvo salvo6 = new Salvo(gameplayer4,1,Arrays.asList("H5","H4"));
 
 			salvoRepository.save(salvo1);
 			salvoRepository.save(salvo2);
 			salvoRepository.save(salvo3);
 			salvoRepository.save(salvo4);
+			salvoRepository.save(salvo5);
+			salvoRepository.save(salvo6);
 
 		};
 	}
