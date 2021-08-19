@@ -1,10 +1,12 @@
-package com.codeoftheweb.salvo;
+package com.codeoftheweb.salvo.Classes;
 
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 public class Salvo {
@@ -70,5 +72,18 @@ public class Salvo {
 
     public void setLocations(List<String> locations) {
         this.locations = locations;
+    }
+
+
+
+    //DTO SALVO
+
+    // Salvo
+    public Map<String, Object> makeSalvoDTO(Salvo salvo) {
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("turn", this   .getTurn());
+        dto.put("player", this.getGamePlayer().getPlayer().getId());
+        dto.put("locations", this.getLocations());
+        return dto;
     }
 }

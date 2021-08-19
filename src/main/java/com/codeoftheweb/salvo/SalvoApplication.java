@@ -1,15 +1,14 @@
 package com.codeoftheweb.salvo;
 
+import com.codeoftheweb.salvo.Classes.*;
+import com.codeoftheweb.salvo.Interfaces.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 
 
 @SpringBootApplication
@@ -29,7 +28,8 @@ public class SalvoApplication {
 									  GameRepository gameRepository,
 									  GamePlayerRepository gamePlayerRepository,
 									  ShipRepository shipRepository,
-									  SalvoRepository salvoRepository	) {
+									  SalvoRepository salvoRepository,
+									  ScoreRepository scoreRepository) {
 
 		return (args) -> {
 			// forzado de grabación players de acuerdo al constructor en Player.java
@@ -117,6 +117,25 @@ public class SalvoApplication {
 			salvoRepository.save(salvo4);
 			salvoRepository.save(salvo5);
 			salvoRepository.save(salvo6);
+
+			// forzado grabación Score
+			Score score1 = new Score(game1, player1, 1.0, LocalDateTime.now());
+			Score score2 = new Score(game1, player2, 0.0, LocalDateTime.now());
+			Score score3 = new Score(game2, player1, 0.5, LocalDateTime.now());
+			Score score4 = new Score(game2, player2, 0.5, LocalDateTime.now());
+			Score score5 = new Score(game3, player2, 1.0, LocalDateTime.now());
+			Score score6 = new Score(game3, player2, 0.0, LocalDateTime.now());
+			Score score7 = new Score(game4, player1, 0.5, LocalDateTime.now());
+			Score score8 = new Score(game4, player2, 0.5, LocalDateTime.now());
+
+			scoreRepository.save(score1);
+			scoreRepository.save(score2);
+			scoreRepository.save(score3);
+			scoreRepository.save(score4);
+			scoreRepository.save(score5);
+			scoreRepository.save(score6);
+			scoreRepository.save(score7);
+			scoreRepository.save(score8);
 
 		};
 	}

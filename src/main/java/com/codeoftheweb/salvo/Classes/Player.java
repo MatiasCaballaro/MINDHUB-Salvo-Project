@@ -1,12 +1,10 @@
-package com.codeoftheweb.salvo;
+package com.codeoftheweb.salvo.Classes;
 
 
         import org.hibernate.annotations.GenericGenerator;
 
         import javax.persistence.*;
-        import java.util.HashSet;
-        import java.util.List;
-        import java.util.Set;
+        import java.util.*;
 
         import static java.util.stream.Collectors.toList;
 
@@ -22,8 +20,13 @@ public class Player {
     // Genera variable String
     private String userName;
 
+    // One to many with GamePlayer
     @OneToMany(mappedBy="player", fetch=FetchType.EAGER)
     Set<GamePlayer> gamePlayers= new HashSet<>();
+
+    // One to many with Score
+    @OneToMany(mappedBy="player", fetch=FetchType.EAGER)
+    Set<Score> scores= new HashSet<>();
 
 
     //CONSTRUCTORES - DEBE indicar constructor vacío y otro con los argumentos
@@ -39,6 +42,10 @@ public class Player {
     // GETTER Y SETTER
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getUserName() {
@@ -63,7 +70,13 @@ public class Player {
     }
 
 
+    public Set<Score> getScores() {
+        return scores;
+    }
 
+    public void setScores(Set<Score> scores) {
+        this.scores = scores;
+    }
 
     // LISTA GAME PARA PLAYER
     public List<Game> getGames() {
@@ -71,6 +84,15 @@ public class Player {
     }
 
 
+
+    // DTO PLAYER
+    // El DTO player toma valores "Id" y "username" (e-mail) para cada gameplayer
+    public Map<String, Object> makePlayerDTO(Player player) {
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("id", this.getId());
+        dto.put("email", this.getUserName());
+        return dto;
+    }
 
 }
 
