@@ -78,21 +78,31 @@ public class Player {
         this.scores = scores;
     }
 
+
     // LISTA GAME PARA PLAYER
-    public List<Game> getGames() {
+    /*public List<Game> getGames() {
         return gamePlayers.stream().map(sub -> sub.getGame()).collect(toList());
-    }
+    }*/
+
+
+
+    // GetScore para evitar DTO Game #001
+    /*public Score getScore (Game game) {
+    return scores.stream().filter(sc->sc.getGame().getId() == game.getId()).findFirst().orElse(null);
+    }*/
+
 
 
 
     // DTO PLAYER
     // El DTO player toma valores "Id" y "username" (e-mail) para cada gameplayer
-    public Map<String, Object> makePlayerDTO(Player player) {
+    public Map<String, Object> makePlayerDTO() {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", this.getId());
         dto.put("email", this.getUserName());
         return dto;
     }
+
 
 }
 

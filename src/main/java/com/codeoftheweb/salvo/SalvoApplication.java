@@ -124,7 +124,7 @@ public class SalvoApplication {
 			Score score3 = new Score(game2, player1, 0.5, LocalDateTime.now());
 			Score score4 = new Score(game2, player2, 0.5, LocalDateTime.now());
 			Score score5 = new Score(game3, player2, 1.0, LocalDateTime.now());
-			Score score6 = new Score(game3, player2, 0.0, LocalDateTime.now());
+			Score score6 = new Score(game3, player3, 0.0, LocalDateTime.now());
 			Score score7 = new Score(game4, player1, 0.5, LocalDateTime.now());
 			Score score8 = new Score(game4, player2, 0.5, LocalDateTime.now());
 

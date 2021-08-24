@@ -114,14 +114,30 @@ public class GamePlayer {
         this.salvos = salvos;
     }
 
+
+    // Método getScore utilizado en makeGamePlayerDTO para no utilizar el DTO de scores en Game #001
+    /*public Score getScore (){
+        return player.getScore(this.game);
+    }*/
+
     // DTO GAMEPLAYER
     // Se crea un DTO para Gameplayer, donde se indica el ID de la fila en esa tabla
     // También se agrega una key "player", con el método para hacer un nuevo array Player mediante makePlayerDTO
 
-    public Map<String, Object> makeGamePlayerDTO(GamePlayer gamePlayer) {
+    public Map<String, Object> makeGamePlayerDTO() {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", this.getId());
-        dto.put("player", this.getPlayer().makePlayerDTO(this.getPlayer()));
+        dto.put("player", this.getPlayer().makePlayerDTO());
+
+
+        // Prueba GetScore sin DTO en GameDTO
+        /*if(this.getScore() != null){
+            //dto.put("score", this.getScore().getScore());
+            dto.put("score", this.getScore().getScore());
+        }*/
+
+
+
         return dto;
     }
 
@@ -134,9 +150,9 @@ public class GamePlayer {
         dto.put("gamePlayers",
                 this.getGame().getGameplayers()
                         .stream()
-                        .map(gp -> gp.makeGamePlayerDTO(gp)).collect(Collectors.toList()));
+                        .map(gp -> gp.makeGamePlayerDTO()).collect(Collectors.toList()));
         dto.put("ships", gamePlayer.getShips().stream()
-                .map(sh -> sh.makeShipDTO(sh)).collect(Collectors.toList()));
+                .map(sh -> sh.makeShipDTO()).collect(Collectors.toList()));
 
         // Se utiliza Flat Map, que a diferencia del map, resuelve (aplana) los arrays en un solo nivel
         dto.put("salvoes", gamePlayer.getGame().getGameplayers().stream()
@@ -144,34 +160,34 @@ public class GamePlayer {
                         .map(s -> s.makeSalvoDTO(s))).collect(Collectors.toList()));
 
         // Usando For
-                    /*
-                    List<Map<String, Object>> listaux = new  ArrayList<>();
+            /*
+            List<Map<String, Object>> listaux = new  ArrayList<>();
 
-                            // "Gameplayer gp" es el nombre que va a tener cada recorrido >
-                            // dentro de lo que va a la derecha de los ":"
-                            // ,al igual que "Salvo s"
+                    // "Gameplayer gp" es el nombre que va a tener cada recorrido >
+                    // dentro de lo que va a la derecha de los ":"
+                    // ,al igual que "Salvo s"
 
-                    for (GamePlayer gp: gamePlayer.getGame().gamePlayers) {
-                        for (Salvo s:gp.getSalvos()){
-                            listaux.add(makeSalvoDTO(s));
-                        }
-                    }
-                    dto.put("salvoes2", listaux);
-                    */
+            for (GamePlayer gp: gamePlayer.getGame().gamePlayers) {
+                for (Salvo s:gp.getSalvos()){
+                    listaux.add(s.makeSalvoDTO(s));
+                }
+            }
+            dto.put("salvoes2", listaux);*/
 
-        // Usando forEach - PROBAR intento 1
-                    /*List<List<Integer>> listabidimensional = new ArrayList<List<Integer>>(Arrays.asList(
-                            new ArrayList<Integer>(Arrays.asList(1,2)),
-                            new ArrayList<Integer>(Arrays.asList(3,4))
-                    ));
-                    System.out.println(listabidimensional);
-                    List<Integer> listaAux = new ArrayList<>();
-                    for (List<Integer> l1:listabidimensional){
-                        for(Integer l2:l1){
-                            listaAux.add(l2);
-                        }
-                    }
-                    dto.put("salvoes2", listaAux);*/
+
+                // Usando forEach - PROBAR intento 1
+                            /*List<List<Integer>> listabidimensional = new ArrayList<List<Integer>>(Arrays.asList(
+                                    new ArrayList<Integer>(Arrays.asList(1,2)),
+                                    new ArrayList<Integer>(Arrays.asList(3,4))
+                            ));
+                            System.out.println(listabidimensional);
+                            List<Integer> listaAux = new ArrayList<>();
+                            for (List<Integer> l1:listabidimensional){
+                                for(Integer l2:l1){
+                                    listaAux.add(l2);
+                                }
+                            }
+                            dto.put("salvoes2", listaAux);*/
 
 
     return dto;

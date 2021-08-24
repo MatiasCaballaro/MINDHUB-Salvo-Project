@@ -29,42 +29,29 @@ public class SalvoController {
     @Autowired
     private SalvoRepository salvoRepository;
 
-                /*
-                // Paso 1 devuelve toda la lista de búsqueda
-
-                @RequestMapping("/games-test1")
-                public List<Game> getAll() {
-                    return gameRepository.findAll();
-                }
-
-
-                // Devuelve todo los gameIds del Game Repository
-                // Usando el la función get y una de las declaraciones de la clase
-                // en este caso GetId (ya declarada en Game)
-
-                @RequestMapping("/games-test-1")
-                public List<Object> listaGameId() {
-                    return gameRepository
-                            .findAll()
-                            .stream()
-                            .map(game -> game.getId())
-                            .collect(Collectors.toList());
-                }
-                */
-
 
     // Creo un List Object, y no paso una variable específica, sino un Map (Array)
     // Lo que hace el stream () es para cada uno de los find all, todo lo que está adentro del map
     // el map, va cambiando la variable "game" a "game+1", generando bucle por cada objeto, y va devolviendo
     // los atributos creados en el DTO
     @RequestMapping("/games")
-    public List<Object> listaGameId() {
+    public Map <String, Object> game () {
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("games", gameRepository.findAll()
+                .stream()
+                .map(game1 -> game1.makeGameDTO())
+                .collect(Collectors.toList()));
+        return dto;
+    }
+
+
+    /*public List<Object> listaGameId() {
         return gameRepository
                 .findAll()
                 .stream()
                 .map(g -> g.makeGameDTO(g))
                 .collect(Collectors.toList());
-    }
+    }*/
 
     // game_view toma Id de gameplayer y hace un objeto GameView con todos los datos requeridos
     // la url sería /api/game_view/nn donde nn es la variable
@@ -84,8 +71,6 @@ public class SalvoController {
                 .stream()
                 .map(s -> s.makeSalvoDTO(s)).collect(Collectors.toList());
     }
-
-
 
 
 }

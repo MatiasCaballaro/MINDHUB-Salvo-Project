@@ -86,16 +86,35 @@ public class Game {
     // en el makeGameDTO, se pasa como variable un objeto de tipo game
     // Además, se crea un Array anidado para gameplayer, usando el método game.getGamePlayers
     // Desde ese método toma los datos y los va trabajando como indica el makeGamePlayerDTO
-    public Map<String, Object> makeGameDTO(Game game) {
+    public Map<String, Object> makeGameDTO() {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", this.getId());
         dto.put("created", this.getCreationDate());
         dto.put("gamePlayers",
-                game.getGameplayers()
+                this.getGameplayers()
                         .stream()
-                        .map(gp -> gp.makeGamePlayerDTO(gp)).collect(Collectors.toList()));
-        return dto;
-    }
+                        .map(gp -> gp.makeGamePlayerDTO()).collect(Collectors.toList()));
+        dto.put("scores", this.getScores().stream()
+                   .map(score -> score.makeScoreDTO()).collect(Collectors.toList()));
+
+        /*
+            //otra forma sin usar get scores (), la diferencia es que no sale nada si no termina (null) #001
+                dto.put("scores", this.getGamePlayers().stream().map(sc->
+                            {
+                                if (sc.getScore()!=null) {
+                                    return sc.getScore().makeScoreDTO();
+                                }
+                                else
+                                {return null;}
+                            }
+                        )
+                );
+        */
+
+            return dto;
+
+        }
+
 
 }
 
