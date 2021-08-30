@@ -17,8 +17,11 @@ public class Player {
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
 
-    // Genera variable String
+    // Genera atributo String
     private String userName;
+
+    // Genera atributo Password
+    private String password;
 
     // One to many with GamePlayer
     @OneToMany(mappedBy="player", fetch=FetchType.EAGER)
@@ -32,14 +35,15 @@ public class Player {
     //CONSTRUCTORES - DEBE indicar constructor vacío y otro con los argumentos
     public Player() { }
 
-    public Player(String userName) {
+    public Player(String userName, String password) {
         this.userName = userName;
+        this.password = password;
     }
 
 
 
-
     // GETTER Y SETTER
+
     public long getId() {
         return id;
     }
@@ -56,9 +60,12 @@ public class Player {
         this.userName = userName;
     }
 
-    public void addGameplayer(GamePlayer gamePlayer) {
-        gamePlayer.setPlayer(this);
-        GamePlayer.add(gamePlayer);
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Set<GamePlayer> getGamePlayers() {
@@ -68,7 +75,6 @@ public class Player {
     public void setGamePlayers(Set<GamePlayer> gamePlayers) {
         this.gamePlayers = gamePlayers;
     }
-
 
     public Set<Score> getScores() {
         return scores;
