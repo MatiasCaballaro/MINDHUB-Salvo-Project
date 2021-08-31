@@ -8,8 +8,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.GlobalAuthenticationConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,9 +20,6 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -211,22 +206,23 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 				//antMatchers("/admin/**").hasAuthority("ADMIN")
-				//.antMatchers("/login").permitAll()
 				.antMatchers("/api/login").permitAll()
 				.antMatchers("/web/**").permitAll()
 				.antMatchers("/api/games").permitAll()
 				.antMatchers("/api/players").permitAll()
-				.antMatchers("**").hasAuthority("PLAYER")
-				//.antMatchers("/api/games").hasAuthority("PLAYER")
-				//.antMatchers("/web/games.html").hasAuthority("PLAYER")
-				//.and()
-				//.formLogin();
+				.antMatchers("/h2-console/**").permitAll()
+				.and().headers().frameOptions().disable()
+				.and().csrf().ignoringAntMatchers("/h2-console/**")
+				.and()
+				.cors().disable();
+		http.authorizeRequests().
+				antMatchers("**").hasAuthority("PLAYER")
 				;
 
 			// modificar la ruta del formLogin predeterminado
 			http.formLogin()
-					.usernameParameter("username")
-					.passwordParameter("password")
+					.usernameParameter("name")
+					.passwordParameter("pwd")
 					.loginPage("/api/login")
 					;
 			http.logout().logoutUrl("/api/logout");

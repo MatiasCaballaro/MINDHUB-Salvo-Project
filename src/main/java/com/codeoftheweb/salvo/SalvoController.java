@@ -44,7 +44,6 @@ public class SalvoController {
     @RequestMapping("/games")
     public Map <String, Object> game (Authentication authentication) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
-
         if (!isGuest(authentication)) {
            dto.put("player", playerRepository.findByUserName(authentication.getName()).makePlayerDTO());
        }
@@ -112,7 +111,7 @@ public class SalvoController {
 
     @RequestMapping(path = "/players", method = RequestMethod.POST)
     public ResponseEntity<Object> register(
-            @RequestParam String userName, @RequestParam String password) {
+            @RequestParam (value="email") String userName, @RequestParam (value="password")String password) {
 
         if (userName.isEmpty() || password.isEmpty() ) {
             return new ResponseEntity<>("Te falta completar datos Mossstro", HttpStatus.FORBIDDEN);
@@ -123,7 +122,7 @@ public class SalvoController {
         }
 
         playerRepository.save(new Player(userName, passwordEncoder.encode(password)));
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>("Creación de usuario exitosa",HttpStatus.CREATED);
     }
 
 }
