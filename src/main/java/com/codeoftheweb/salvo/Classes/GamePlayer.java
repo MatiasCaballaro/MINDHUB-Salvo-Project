@@ -147,6 +147,7 @@ public class GamePlayer {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", this.getGame().getId());
         dto.put("created", this.getGame().getCreationDate());
+        dto.put("gameState", "PLACESHIPS");
         dto.put("gamePlayers",
                 this.getGame().getGameplayers()
                         .stream()
@@ -188,7 +189,10 @@ public class GamePlayer {
                                 }
                             }
                             dto.put("salvoes2", listaAux);*/
-
+        Map<String, Object> hits = new LinkedHashMap<String, Object>();
+        hits.put("self", new ArrayList<>());
+        hits.put("opponent", new ArrayList<>());
+        dto.put("hits", hits);
 
     return dto;
     }

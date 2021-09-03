@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -32,10 +33,17 @@ public class SalvoController {
     @Autowired
     private SalvoRepository salvoRepository;
 
-
     @Autowired
     PasswordEncoder passwordEncoder;
 
+
+
+
+    private Map <String, Object> makeMap(String key, Object value){
+        Map<String, Object> map = new HashMap<>();
+        map.put(key,value);
+        return map;
+    }
 
     // Creo un List Object, y no paso una variable específica, sino un Map (Array)
     // Lo que hace el stream () es para cada uno de los find all, todo lo que está adentro del map
@@ -44,10 +52,10 @@ public class SalvoController {
     @RequestMapping("/games")
     public Map <String, Object> game (Authentication authentication) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        if (!isGuest(authentication)) {
+       if (!isGuest(authentication)) {
            dto.put("player", playerRepository.findByUserName(authentication.getName()).makePlayerDTO());
        }
-       else {dto.put("player", null);}
+       else {dto.put("player", "Guest");}
 
         dto.put("games", gameRepository.findAll()
                 .stream()
@@ -55,6 +63,8 @@ public class SalvoController {
                 .collect(Collectors.toList()));
         return dto;
     }
+
+
 
     private boolean isGuest(Authentication authentication) {
         return authentication == null || authentication instanceof AnonymousAuthenticationToken;
@@ -78,11 +88,17 @@ public class SalvoController {
     // la url sería /api/game_view/nn donde nn es la variable
 
     @RequestMapping("/game_view/{nn}")
-    public Map<String, Object> findGame(@PathVariable Long nn) {
+    public ResponseEntity<Map<String,Object>> findGame(@PathVariable Long nn, Authentication authentication) {
         GamePlayer gamePlayer = gamePlayerRepository.getById(nn);
-        return gamePlayer.makeGameViewDTO(gamePlayer);
-    }
 
+        if (playerRepository.findByUserName(authentication.getName()).getGamePlayers()
+                .stream().anyMatch(gamePlayer1 -> gamePlayer1.getId()==nn)) {
+            return new ResponseEntity<>(gamePlayer.makeGameViewDTO(gamePlayer), HttpStatus.ACCEPTED);
+        } else {
+            return new ResponseEntity<>
+                    (makeMap("error", "Gameplayer no pertenece al usuario actual, no hagas trampa pilluelo"), HttpStatus.FORBIDDEN);
+        }
+    }
 
     // Prueba de salvoes
     @RequestMapping("/salvoes")
@@ -109,7 +125,7 @@ public class SalvoController {
 
     // AUTHENTICATION
 
-    @RequestMapping(path = "/players", method = RequestMethod.POST)
+    /*@RequestMapping(path = "/players", method = RequestMethod.POST)
     public ResponseEntity<Object> register(
             @RequestParam (value="email") String userName, @RequestParam (value="password")String password) {
 
@@ -122,7 +138,87 @@ public class SalvoController {
         }
 
         playerRepository.save(new Player(userName, passwordEncoder.encode(password)));
-        return new ResponseEntity<>("Creación de usuario exitosa",HttpStatus.CREATED);
+        return new ResponseEntity<>("usuario creado",HttpStatus.CREATED);
+    }*/
+
+   
+
+    // CREACION DE PLAYERS (CON VERIFICACION Y RESPONSE ENTITIES)
+    @RequestMapping(path = "/players", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> register(
+            @RequestParam (value="email") String userName, @RequestParam (value="password")String password) {
+
+        if (userName.isEmpty() || password.isEmpty() ) {
+            return new ResponseEntity<>(makeMap("error", "Falta completar Datos"), HttpStatus.FORBIDDEN);
+        }
+
+        if (playerRepository.findByUserName(userName) !=  null) {
+            return new ResponseEntity<>(makeMap("error", "Usuario Existente"), HttpStatus.FORBIDDEN);
+        }
+
+        Player newPlayer= playerRepository.save(new Player(userName, passwordEncoder.encode(password)));
+        return new ResponseEntity<>(makeMap("name", newPlayer.getUserName()),HttpStatus.CREATED);
+    }
+
+
+    // CREACION DE GAMES
+    @RequestMapping(path = "/games", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> createGame(Authentication authentication) {
+
+
+
+        if (isGuest(authentication)) {
+            return new ResponseEntity<>(makeMap("error", "No estás logueado"), HttpStatus.FORBIDDEN);
+        }
+
+
+        // CREATE GAME
+        Game newGame= gameRepository.save(new Game(LocalDateTime.now()));
+
+        // JOIN PLAYER INTO NEW GAME
+        GamePlayer newGamePlayer= gamePlayerRepository
+                .save(new GamePlayer(LocalDateTime.now(), playerRepository.findByUserName(authentication.getName()), newGame));
+
+        return new ResponseEntity<>(makeMap("gpid", newGamePlayer.getId()), HttpStatus.CREATED);
+    }
+
+
+    // JOIN GAME
+    @RequestMapping(path = "/game/{nn}/players", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> joinGame(Authentication authentication,
+                                                        @PathVariable Long nn){
+
+        if (isGuest(authentication)) {
+            return new ResponseEntity<>(makeMap("error", "No estás logueado"), HttpStatus.FORBIDDEN);
+        }
+
+        if (!gameRepository.existsById(nn)){
+
+            return new ResponseEntity<>(makeMap("error", "No existe Game"), HttpStatus.FORBIDDEN);
+        }
+        else {
+            Game currentGame = gameRepository.getById(nn);
+
+            if (currentGame.getGamePlayers().size()>1){
+                return new ResponseEntity<>(makeMap("error", "el juego está lleno"), HttpStatus.FORBIDDEN);
+            }
+
+            Player auth=playerRepository.findByUserName(authentication.getName());
+            //if (playerRepository.findByUserName(authentication.getName()).getGamePlayers()
+            //        .stream().anyMatch(gamePlayer1 -> gamePlayer1.getId()==nn))
+
+            if (currentGame.getGameplayers().stream()
+                    .anyMatch(gamePlayer -> gamePlayer.getPlayer().getId() == auth.getId()))
+                     {
+                return new ResponseEntity<>(makeMap("error", "el jugador ya participa del juego"), HttpStatus.FORBIDDEN);}
+            //return new ResponseEntity<>(makeMap("currentGame", currentGame.getId()), HttpStatus.ACCEPTED);
+
+            GamePlayer newGamePlayer = gamePlayerRepository
+                    .save(new GamePlayer(LocalDateTime.now(), auth, currentGame));
+
+            return new ResponseEntity<>(makeMap("gpid", newGamePlayer.getId()), HttpStatus.ACCEPTED);
+
+        }
     }
 
 }
