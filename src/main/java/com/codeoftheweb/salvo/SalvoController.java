@@ -90,14 +90,34 @@ public class SalvoController {
     @RequestMapping("/game_view/{nn}")
     public ResponseEntity<Map<String,Object>> findGame(@PathVariable Long nn, Authentication authentication) {
         GamePlayer gamePlayer = gamePlayerRepository.getById(nn);
+        Player currentPlayer = playerRepository.findByUserName(authentication.getName());
 
-        if (playerRepository.findByUserName(authentication.getName()).getGamePlayers()
+        /*
+
+        // opcion 1
+        if (currentPlayer.getGamePlayers()
                 .stream().anyMatch(gamePlayer1 -> gamePlayer1.getId()==nn)) {
             return new ResponseEntity<>(gamePlayer.makeGameViewDTO(gamePlayer), HttpStatus.ACCEPTED);
-        } else {
+        }
+        else {
             return new ResponseEntity<>
                     (makeMap("error", "Gameplayer no pertenece al usuario actual, no hagas trampa pilluelo"), HttpStatus.FORBIDDEN);
         }
+
+        */
+
+        // opcion 2
+        if(gamePlayer.getPlayer() != currentPlayer) {
+            return new ResponseEntity<>
+                    (makeMap("error", "Gameplayer no pertenece al usuario actual, no hagas trampa pilluelo"), HttpStatus.FORBIDDEN);
+        }
+
+        else  {
+            return new ResponseEntity<>(gamePlayer.makeGameViewDTO(gamePlayer), HttpStatus.ACCEPTED);
+        }
+
+
+
     }
 
     // Prueba de salvoes
@@ -166,55 +186,66 @@ public class SalvoController {
     public ResponseEntity<Map<String, Object>> createGame(Authentication authentication) {
 
 
-
         if (isGuest(authentication)) {
             return new ResponseEntity<>(makeMap("error", "No estás logueado"), HttpStatus.FORBIDDEN);
         }
 
+        Player currentPlayer = playerRepository.findByUserName(authentication.getName());
+
+        if(currentPlayer==null){
+            return new ResponseEntity<>(makeMap("error", "No estás logueado"), HttpStatus.FORBIDDEN);
+        }
 
         // CREATE GAME
         Game newGame= gameRepository.save(new Game(LocalDateTime.now()));
 
         // JOIN PLAYER INTO NEW GAME
         GamePlayer newGamePlayer= gamePlayerRepository
-                .save(new GamePlayer(LocalDateTime.now(), playerRepository.findByUserName(authentication.getName()), newGame));
+                .save(new GamePlayer(LocalDateTime.now(), currentPlayer, newGame));
 
         return new ResponseEntity<>(makeMap("gpid", newGamePlayer.getId()), HttpStatus.CREATED);
     }
 
 
     // JOIN GAME
-    @RequestMapping(path = "/game/{nn}/players", method = RequestMethod.POST)
+    @RequestMapping(path = "/game/{gameID}/players", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> joinGame(Authentication authentication,
-                                                        @PathVariable Long nn){
+                                                        @PathVariable Long gameID){
 
+        // Comprobación de autenticación
         if (isGuest(authentication)) {
             return new ResponseEntity<>(makeMap("error", "No estás logueado"), HttpStatus.FORBIDDEN);
         }
 
-        if (!gameRepository.existsById(nn)){
-
+        // Comprobación si existe el game
+        if (!gameRepository.existsById(gameID)){
             return new ResponseEntity<>(makeMap("error", "No existe Game"), HttpStatus.FORBIDDEN);
         }
         else {
-            Game currentGame = gameRepository.getById(nn);
 
+            Game currentGame = gameRepository.getById(gameID);
+
+            Player currentPlayer=playerRepository.findByUserName(authentication.getName());
+
+            // Comprobación si el usuario está ok
+            if(currentPlayer==null){
+                return new ResponseEntity<>(makeMap("error", "No estás logueado"), HttpStatus.FORBIDDEN);
+            }
+
+            // Comprobación si el juego está lleno
             if (currentGame.getGamePlayers().size()>1){
                 return new ResponseEntity<>(makeMap("error", "el juego está lleno"), HttpStatus.FORBIDDEN);
             }
 
-            Player auth=playerRepository.findByUserName(authentication.getName());
-            //if (playerRepository.findByUserName(authentication.getName()).getGamePlayers()
-            //        .stream().anyMatch(gamePlayer1 -> gamePlayer1.getId()==nn))
-
+            // Comprobación si un jugador quiere unirse a un juego del que ya forma parte
             if (currentGame.getGameplayers().stream()
-                    .anyMatch(gamePlayer -> gamePlayer.getPlayer().getId() == auth.getId()))
+                    .anyMatch(gamePlayer -> gamePlayer.getPlayer().getId() == currentPlayer.getId()))
                      {
                 return new ResponseEntity<>(makeMap("error", "el jugador ya participa del juego"), HttpStatus.FORBIDDEN);}
-            //return new ResponseEntity<>(makeMap("currentGame", currentGame.getId()), HttpStatus.ACCEPTED);
+
 
             GamePlayer newGamePlayer = gamePlayerRepository
-                    .save(new GamePlayer(LocalDateTime.now(), auth, currentGame));
+                    .save(new GamePlayer(LocalDateTime.now(), currentPlayer, currentGame));
 
             return new ResponseEntity<>(makeMap("gpid", newGamePlayer.getId()), HttpStatus.ACCEPTED);
 
