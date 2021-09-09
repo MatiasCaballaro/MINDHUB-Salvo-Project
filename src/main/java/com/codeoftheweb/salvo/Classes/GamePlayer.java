@@ -158,7 +158,7 @@ public class GamePlayer {
         // Se utiliza Flat Map, que a diferencia del map, resuelve (aplana) los arrays en un solo nivel
         dto.put("salvoes", gamePlayer.getGame().getGameplayers().stream()
                 .flatMap(gamePlayerSalvos -> gamePlayerSalvos.getSalvos().stream()
-                        .map(s -> s.makeSalvoDTO(s))).collect(Collectors.toList()));
+                        .map(s -> s.makeSalvoDTO())).collect(Collectors.toList()));
 
         // Usando For
             /*
@@ -175,20 +175,19 @@ public class GamePlayer {
             }
             dto.put("salvoes2", listaux);*/
 
-
-                // Usando forEach - PROBAR intento 1
-                            /*List<List<Integer>> listabidimensional = new ArrayList<List<Integer>>(Arrays.asList(
-                                    new ArrayList<Integer>(Arrays.asList(1,2)),
-                                    new ArrayList<Integer>(Arrays.asList(3,4))
-                            ));
-                            System.out.println(listabidimensional);
-                            List<Integer> listaAux = new ArrayList<>();
-                            for (List<Integer> l1:listabidimensional){
-                                for(Integer l2:l1){
-                                    listaAux.add(l2);
-                                }
-                            }
-                            dto.put("salvoes2", listaAux);*/
+        // Usando forEach - PROBAR intento 1
+                    /*List<List<Integer>> listabidimensional = new ArrayList<List<Integer>>(Arrays.asList(
+                            new ArrayList<Integer>(Arrays.asList(1,2)),
+                            new ArrayList<Integer>(Arrays.asList(3,4))
+                    ));
+                    System.out.println(listabidimensional);
+                    List<Integer> listaAux = new ArrayList<>();
+                    for (List<Integer> l1:listabidimensional){
+                        for(Integer l2:l1){
+                            listaAux.add(l2);
+                        }
+                    }
+                    dto.put("salvoes2", listaAux);*/
         Map<String, Object> hits = new LinkedHashMap<String, Object>();
         hits.put("self", new ArrayList<>());
         hits.put("opponent", new ArrayList<>());

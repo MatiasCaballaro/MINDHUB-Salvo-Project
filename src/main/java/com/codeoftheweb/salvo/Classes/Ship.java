@@ -16,7 +16,7 @@ public class Ship {
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
 
-    private String shipType;
+    private String type;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="gamePlayerID")
@@ -25,7 +25,7 @@ public class Ship {
 
     @ElementCollection
     @Column(name="location")
-    private List<String> locations = new ArrayList<>();
+    private List<String> shipLocations = new ArrayList<>();
 
 
 
@@ -35,10 +35,10 @@ public class Ship {
     public Ship() {
     }
 
-    public Ship(String shipType, GamePlayer gamePlayerID, List<String> locations) {
-        this.shipType = shipType;
+    public Ship(String type, GamePlayer gamePlayerID, List<String> shipLocations) {
+        this.type = type;
         this.gamePlayer = gamePlayerID;
-        this.locations = locations;
+        this.shipLocations = shipLocations;
     }
 
 
@@ -53,12 +53,12 @@ public class Ship {
         this.id = id;
     }
 
-    public String getShipType() {
-        return shipType;
+    public String getType() {
+        return type;
     }
 
-    public void setShipType(String shipType) {
-        this.shipType = shipType;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public GamePlayer getGamePlayer() {
@@ -69,12 +69,12 @@ public class Ship {
         this.gamePlayer = gamePlayer;
     }
 
-    public List<String> getLocations() {
-        return locations;
+    public List<String> getShipLocations() {
+        return shipLocations;
     }
 
-    public void setLocations(List<String> locations) {
-        this.locations = locations;
+    public void setShipLocations(List<String> shipLocations) {
+        this.shipLocations = shipLocations;
     }
 
 
@@ -83,8 +83,8 @@ public class Ship {
     // ShipDTO
     public Map<String, Object> makeShipDTO() {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("type", this.getShipType());
-        dto.put("locations", this.getLocations());
+        dto.put("type", this.getType());
+        dto.put("locations", this.getShipLocations());
         return dto;
     }
 

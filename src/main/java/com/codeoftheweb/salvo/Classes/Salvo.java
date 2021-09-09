@@ -25,7 +25,7 @@ public class Salvo {
 
     @ElementCollection
     @Column(name="location")
-    private List<String> locations = new ArrayList<>();
+    private List<String> salvoLocations = new ArrayList<>();
 
     //CONSTRUCTORES
 
@@ -33,10 +33,10 @@ public class Salvo {
     public Salvo() {
     }
 
-    public Salvo(GamePlayer gamePlayer, int turn, List<String> locations) {
+    public Salvo(GamePlayer gamePlayer, int turn, List<String> salvoLocations) {
         this.gamePlayer = gamePlayer;
         this.turn = turn;
-        this.locations = locations;
+        this.salvoLocations = salvoLocations;
     }
 
     // GETTERS Y SETTERS
@@ -66,12 +66,12 @@ public class Salvo {
         this.turn = turn;
     }
 
-    public List<String> getLocations() {
-        return locations;
+    public List<String> getSalvoLocations() {
+        return salvoLocations;
     }
 
-    public void setLocations(List<String> locations) {
-        this.locations = locations;
+    public void setSalvoLocations(List<String> salvoLocations) {
+        this.salvoLocations = salvoLocations;
     }
 
 
@@ -79,11 +79,11 @@ public class Salvo {
     //DTO SALVO
 
     // Salvo
-    public Map<String, Object> makeSalvoDTO(Salvo salvo) {
+    public Map<String, Object> makeSalvoDTO() {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("turn", this   .getTurn());
         dto.put("player", this.getGamePlayer().getPlayer().getId());
-        dto.put("locations", this.getLocations());
+        dto.put("turn", this   .getTurn());
+        dto.put("locations", this.getSalvoLocations());
         return dto;
     }
 }

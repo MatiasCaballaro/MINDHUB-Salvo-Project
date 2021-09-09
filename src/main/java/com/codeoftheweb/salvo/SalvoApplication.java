@@ -99,15 +99,15 @@ public class SalvoApplication {
 			gamePlayerRepository.save(gameplayer11);
 
 			// forzado grabación Ships
-			Ship ship1 = new Ship ("Destroyer", gameplayer1, Arrays.asList("A2","A3","A4"));
-			Ship ship2 = new Ship ("Submarine", gameplayer1, Arrays.asList("C1","C2","C3"));
-			Ship ship3 = new Ship ("Patrol Boat", gameplayer2, Arrays.asList("C2","D2"));
-			Ship ship4 = new Ship ("Submarine", gameplayer2, Arrays.asList("A2","A3","A4"));
-			Ship ship5 = new Ship ("Patrol Boat", gameplayer1, Arrays.asList("G8","H8"));
-			Ship ship6 = new Ship ("Submarine", gameplayer3, Arrays.asList("C2","C3","C4"));
-			Ship ship7 = new Ship ("Destroyer", gameplayer4, Arrays.asList("A2","B2"));
-			Ship ship8 = new Ship ("Carrier", gameplayer1, Arrays.asList("E1","E2","E3","E4","E5"));
-			Ship ship9 = new Ship ("Battleship", gameplayer1, Arrays.asList("G2","H2","I2","J2"));
+			Ship ship1 = new Ship ("destroyer", gameplayer1, Arrays.asList("A2","A3","A4"));
+			Ship ship2 = new Ship ("submarine", gameplayer1, Arrays.asList("C1","C2","C3"));
+			Ship ship3 = new Ship ("patrolboat", gameplayer2, Arrays.asList("C2","D2"));
+			Ship ship4 = new Ship ("submarine", gameplayer2, Arrays.asList("A2","A3","A4"));
+			Ship ship5 = new Ship ("patrolboat", gameplayer1, Arrays.asList("G8","H8"));
+			Ship ship6 = new Ship ("submarine", gameplayer3, Arrays.asList("C2","C3","C4"));
+			Ship ship7 = new Ship ("destroyer", gameplayer4, Arrays.asList("A2","B2"));
+			Ship ship8 = new Ship ("carrier", gameplayer1, Arrays.asList("E1","E2","E3","E4","E5"));
+			Ship ship9 = new Ship ("battleship", gameplayer1, Arrays.asList("G2","H2","I2","J2"));
 			shipRepository.save(ship1);
 			shipRepository.save(ship2);
 			shipRepository.save(ship3);
