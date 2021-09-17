@@ -34,7 +34,7 @@ public class GamePlayer {
     // SALVO
 
     @OneToMany(mappedBy="gamePlayer", fetch=FetchType.EAGER)
-    Set<Salvo> salvos = new HashSet<>();
+    List<Salvo> salvos = new ArrayList<>();
 
     //CONSTRUCTORES
     public GamePlayer() { }
@@ -105,14 +105,173 @@ public class GamePlayer {
 
     // GETTERS Y SETTERS SALVO
 
-
-    public Set<Salvo> getSalvos() {
+    public List<Salvo> getSalvos() {
         return salvos;
     }
 
-    public void setSalvos(Set<Salvo> salvos) {
+    public void setSalvos(List<Salvo> salvos) {
         this.salvos = salvos;
     }
+
+
+
+
+
+    // OBTENER OPONENTE
+
+    public GamePlayer getOpponent(){
+
+        Game currentGame = this.getGame();
+
+        GamePlayer opponent = currentGame.getGamePlayers().stream()
+                .filter(gp -> gp.getId() != this.getId()).findFirst().orElse(null);
+        return opponent;
+    }
+
+    // OBTENER SHIP LOCATIONS POR NOMBRE
+    private List<String> shipLocations(String type) {
+
+        Optional<Ship> shipLocations =  ships.stream()
+                .filter(s -> s.getType() == type ).findFirst();
+
+        if(!shipLocations.isPresent()) {
+            return new ArrayList<>();
+        } else {
+            return shipLocations.get().getShipLocations();
+        }
+    }
+
+
+
+
+    // OBTENER HITS
+
+    private List<Map<String, Object>> listHits(){
+
+        // LISTA PRINCIPAL, ES UNA LISTA DE MAP<STRING,OBJECT>
+        List<Map<String, Object>> listHits = new ArrayList<>();
+
+        // Se obtienen las locations de cada barco del Gameplayer
+        List<String> carrierLocations = shipLocations("carrier");
+        System.out.println(carrierLocations);
+        List<String> battleshipLocations = shipLocations("battleship");
+        System.out.println(battleshipLocations);
+        List<String> submarineLocations = shipLocations("submarine");
+        System.out.println(submarineLocations);
+        List<String> destroyerLocations = shipLocations("destroyer");
+        System.out.println(destroyerLocations);
+        List<String> patrolboatLocations = shipLocations("patrolboat");
+        System.out.println(patrolboatLocations);
+
+        // Forma 2 de obtener barcos
+        /*Ship carrier1 = this.getShips().stream().filter(sh-> sh.getType().equals("carrier")).findFirst().get();
+        List<String> carrierlocation1 = carrier1.getShipLocations();
+        System.out.println(carrierlocation1);*/
+
+        // Forma 3 de obtener barcos
+        /*List <String> battleship1 = this.getShips().stream().filter(sh-> sh.getType().equals("battleship")).findFirst().get().getShipLocations();
+        System.out.println(battleship1);*/
+
+
+        // Contadores de daño acumulado
+        int carrier=0;
+        int battleship=0;
+        int submarine=0;
+        int destroyer=0;
+        int patrolboat=0;
+
+        // 1er For para pasar por los turnos
+        // Se obtienen tambien los tiros del gameplayer oponente
+        for(Salvo salvo : this.getOpponent().getSalvos()) {
+
+            // Para agregar luego a la lista "List<Map<String, Object>> listHits"
+            Map<String, Object> hitsTurno = new LinkedHashMap<>();
+
+            // Muestra location si pegó a una embarcación enemiga
+            List<String> hitLocations = new ArrayList<>();
+
+
+            //  Contadores daño por turno
+            int carrierHits = 0;
+            int battleshipHits = 0;
+            int submarineHits = 0;
+            int destroyerHits = 0;
+            int patrolboatHits = 0;
+            int missedShots = salvo.getSalvoLocations().size();
+
+            // Agrupa los datos necesarios por turno
+            Map<String, Object> damageTurno = new LinkedHashMap<>();
+
+            // Compara cada location de salvo contra las ubicaciones del enemigo
+            // Si coincide algún disparo:
+            // Muestra locations de donde impacto nuestro tiro
+            // Suma 1 al daño general por embarcación
+            // Suma 1 al daño realizado en el turno por embarcación
+            // Resta -1 a los tiros fallados (que no pegó contra nada)
+
+            for(String location : salvo.getSalvoLocations()) {
+
+                if(carrierLocations.contains(location)) {
+                    hitLocations.add(location);
+                    carrier++;
+                    carrierHits++;
+                    missedShots--;
+                }
+
+                if(battleshipLocations.contains(location)) {
+                    hitLocations.add(location);
+                    battleship++;
+                    battleshipHits++;
+                    missedShots--;
+                }
+
+                if(submarineLocations.contains(location)) {
+                    hitLocations.add(location);
+                    submarine++;
+                    submarineHits++;
+                    missedShots--;
+                }
+
+                if(destroyerLocations.contains(location)) {
+                    hitLocations.add(location);
+                    destroyer++;
+                    destroyerHits++;
+                    missedShots--;
+                }
+
+                if(patrolboatLocations.contains(location)) {
+                    hitLocations.add(location);
+                    patrolboat++;
+                    patrolboatHits++;
+                    missedShots--;
+                }
+
+            }
+
+            // Agrupación de daños por turno y acumulados
+            damageTurno.put("carrierHits", carrierHits);
+            damageTurno.put("battleshipHits", battleshipHits);
+            damageTurno.put("submarineHits", submarineHits);
+            damageTurno.put("destroyerHits", destroyerHits);
+            damageTurno.put("patrolboatHits", patrolboatHits);
+            damageTurno.put("carrier", carrier);
+            damageTurno.put("battleship", battleship);
+            damageTurno.put("submarine", submarine);
+            damageTurno.put("destroyer", destroyer);
+            damageTurno.put("patrolboat", patrolboat);
+
+            // Agrupacion primer nivel para JSON del front
+            hitsTurno.put("turn", salvo.getTurn());
+            hitsTurno.put("hitLocations",hitLocations);
+            hitsTurno.put("damages",damageTurno);
+            hitsTurno.put("missed", missedShots);
+
+
+            listHits.add(hitsTurno);
+        }
+        return listHits;
+    }
+
 
 
     // Método getScore utilizado en makeGamePlayerDTO para no utilizar el DTO de scores en Game #001
@@ -160,39 +319,52 @@ public class GamePlayer {
                 .flatMap(gamePlayerSalvos -> gamePlayerSalvos.getSalvos().stream()
                         .map(s -> s.makeSalvoDTO())).collect(Collectors.toList()));
 
-        // Usando For
-            /*
-            List<Map<String, Object>> listaux = new  ArrayList<>();
+                // Usando For
+                    /*
+                    List<Map<String, Object>> listaux = new  ArrayList<>();
 
-                    // "Gameplayer gp" es el nombre que va a tener cada recorrido >
-                    // dentro de lo que va a la derecha de los ":"
-                    // ,al igual que "Salvo s"
+                            // "Gameplayer gp" es el nombre que va a tener cada recorrido >
+                            // dentro de lo que va a la derecha de los ":"
+                            // ,al igual que "Salvo s"
 
-            for (GamePlayer gp: gamePlayer.getGame().gamePlayers) {
-                for (Salvo s:gp.getSalvos()){
-                    listaux.add(s.makeSalvoDTO(s));
-                }
-            }
-            dto.put("salvoes2", listaux);*/
-
-        // Usando forEach - PROBAR intento 1
-                    /*List<List<Integer>> listabidimensional = new ArrayList<List<Integer>>(Arrays.asList(
-                            new ArrayList<Integer>(Arrays.asList(1,2)),
-                            new ArrayList<Integer>(Arrays.asList(3,4))
-                    ));
-                    System.out.println(listabidimensional);
-                    List<Integer> listaAux = new ArrayList<>();
-                    for (List<Integer> l1:listabidimensional){
-                        for(Integer l2:l1){
-                            listaAux.add(l2);
+                    for (GamePlayer gp: gamePlayer.getGame().gamePlayers) {
+                        for (Salvo s:gp.getSalvos()){
+                            listaux.add(s.makeSalvoDTO(s));
                         }
                     }
-                    dto.put("salvoes2", listaAux);*/
+                    dto.put("salvoes2", listaux);*/
+                // Usando forEach - PROBAR intento 1
+                    /*List<List<Integer>> listabidimensional = new ArrayList<List<Integer>>(Arrays.asList(
+                                    new ArrayList<Integer>(Arrays.asList(1,2)),
+                                    new ArrayList<Integer>(Arrays.asList(3,4))
+                            ));
+                            System.out.println(listabidimensional);
+                            List<Integer> listaAux = new ArrayList<>();
+                            for (List<Integer> l1:listabidimensional){
+                                for(Integer l2:l1){
+                                    listaAux.add(l2);
+                                }
+                            }
+                            dto.put("salvoes2", listaAux);*/
+
         Map<String, Object> hits = new LinkedHashMap<String, Object>();
-        hits.put("self", new ArrayList<>());
-        hits.put("opponent", new ArrayList<>());
+
+        GamePlayer opponent = this.getOpponent();
+
+        // Evita el error que te tira al entrar a un game sin un oponente
+        if(opponent == null) {
+            hits.put("self", new ArrayList<>());
+            hits.put("opponent",  new ArrayList<>());
+        }
+
+        else {
+            hits.put("self", this.listHits());
+            hits.put("opponent",  opponent.listHits());
+        }
+
         dto.put("hits", hits);
 
     return dto;
     }
+
 }

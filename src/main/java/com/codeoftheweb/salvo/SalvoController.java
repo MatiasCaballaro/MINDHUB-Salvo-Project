@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -496,27 +497,52 @@ public class SalvoController {
         // Obtener Game Actual
         Game currentGame = currentGamePlayer.getGame();
 
-        // Obtener Oponente actual (si existiera, por eso el Optional)
-        Optional<GamePlayer> currentOpponent = currentGame.getGamePlayers()
-                .stream().findFirst().filter(gp -> gp.getId()!=currentPlayer.getId());
-        //return new ResponseEntity<>(makeMap("current opponent gamePlayer id",currentOpponent.get().getId()), HttpStatus.ACCEPTED);
 
 
-        // que el jugador actual tenga los 5 barcos ubicados
-        if(currentGamePlayer.getShips().size()!=5){
-            return new ResponseEntity<>(makeMap("error","Primero debes ubicar los 5 barcos"), HttpStatus.ACCEPTED);
+
+        // Obtener player 1
+        GamePlayer player1 = currentGame.getGamePlayers().stream().min(Comparator.comparing(gamePlayer -> gamePlayer.getId())).get();
+            // System.out.println("player1:" + player1.getId());
+
+        // Obtener player 2
+        GamePlayer player2 = currentGame.getGamePlayers().stream().max(Comparator.comparing(gamePlayer -> gamePlayer.getId())).get();
+            // System.out.println("player2:" +  player2.getId());
+
+        // Que el jugador actual tenga los 5 barcos ubicados
+        if(player1.getShips().size()!=5 || player1.getShips().size()==0){
+            return new ResponseEntity<>(makeMap("error","Player 1 debe ubicar los 5 barcos"), HttpStatus.FORBIDDEN);
         }
 
-        // que el oponente tenga los 5 barcos ubicados
-        if(currentOpponent.get().getShips().size()!=5){
-            return new ResponseEntity<>(makeMap("error","El oponente no ubicó aún los 5 barcos"), HttpStatus.ACCEPTED);
+        // Que el oponente tenga los 5 barcos ubicados
+        if(player2.getShips().size()!=5 || player2.getShips().size()==0){
+            return new ResponseEntity<>(makeMap("error","Player 2 debe ubicar los 5 barcos"), HttpStatus.FORBIDDEN);
         }
 
         // Más de un salvo y menos o igual 5
-        if(!(salvo.getSalvoLocations().size()>1 && salvo.getSalvoLocations().size()<6)) {
+        if(!(salvo.getSalvoLocations().size()>0 && salvo.getSalvoLocations().size()<6)) {
             return new ResponseEntity<>(makeMap("error","Tienes que tener al menos un disparo, y no más de 5"), HttpStatus.FORBIDDEN);
         }
-            //return new ResponseEntity<>(makeMap("cantidad de turnos", currentGamePlayer.getSalvos().size()),HttpStatus.ACCEPTED);
+
+
+
+        // Esperar al otro jugador
+        int player1Turns = player1.getSalvos().size();
+        int player2Turns = player2.getSalvos().size();
+            // System.out.println("Turno de player 1 es: " + player1Turns + " y el del player 2 es: " + player2Turns );
+            // System.out.println(player1Turns - player2Turns);
+
+
+        // Validaciones para que cada jugador pueda disparar salvo cuando le corresponda
+        // Evita que se disparen salvos consecutivos sin que el otro jugador juegue
+
+        if(player1Turns>player2Turns && currentGamePlayer.getId()==player1.getId()){
+            return new ResponseEntity<>(makeMap("error","Tienes que esperar al player 2"), HttpStatus.FORBIDDEN);
+        }
+
+        if(player1Turns==player2Turns && currentGamePlayer.getId()==player2.getId()){
+            return new ResponseEntity<>(makeMap("error","Tienes que esperar al player 1"), HttpStatus.FORBIDDEN);
+        }
+
 
 
         // get turn y sumarle 1 para un nuevo turno de salvo
@@ -524,7 +550,8 @@ public class SalvoController {
 
         // Salvo Constructor (GamePlayer gamePlayer, int turn, List<String> locations)
         salvoRepository.save(new Salvo(currentGamePlayer, turnoActual+1,salvo.getSalvoLocations()));
-        return new ResponseEntity<>(makeMap("salvoLocations", currentGamePlayer.getSalvos().size()),HttpStatus.CREATED);
+            // System.out.println("Turno de player 1 es: " + player1Turns + " y el del player 2 es: " + player2Turns );
+        return new ResponseEntity<>(makeMap("Creado", "Se agregó turno "+(turnoActual+1)+" para el jugador " + currentGamePlayer.getId()), HttpStatus.CREATED);
 
     }
 

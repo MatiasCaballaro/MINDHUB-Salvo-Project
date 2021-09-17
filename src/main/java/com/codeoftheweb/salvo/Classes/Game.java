@@ -74,6 +74,8 @@ public class Game {
         this.scores = scores;
     }
 
+
+
     // LISTA PLAYER PARA GAME
     @JsonIgnore
     public List<Player> getPlayers() {
