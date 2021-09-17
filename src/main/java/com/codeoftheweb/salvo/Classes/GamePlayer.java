@@ -180,7 +180,7 @@ public class GamePlayer {
         int destroyer=0;
         int patrolboat=0;
 
-        // 1er For para pasar por los turnos 
+        // 1er For para pasar por los turnos
         // Se obtienen tambien los tiros del gameplayer oponente
         for(Salvo salvo : this.getOpponent().getSalvos()) {
 
