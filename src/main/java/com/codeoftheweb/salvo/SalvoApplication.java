@@ -108,6 +108,9 @@ public class SalvoApplication {
 			Ship ship7 = new Ship ("destroyer", gameplayer4, Arrays.asList("A2","B2"));
 			Ship ship8 = new Ship ("carrier", gameplayer1, Arrays.asList("E1","E2","E3","E4","E5"));
 			Ship ship9 = new Ship ("battleship", gameplayer1, Arrays.asList("G2","H2","I2","J2"));
+
+
+
 			shipRepository.save(ship1);
 			shipRepository.save(ship2);
 			shipRepository.save(ship3);
@@ -136,14 +139,14 @@ public class SalvoApplication {
 			salvoRepository.save(salvo6);
 
 			// forzado grabación Score
-			Score score1 = new Score(game1, player1, 1.0, LocalDateTime.now());
-			Score score2 = new Score(game1, player2, 0.0, LocalDateTime.now());
-			Score score3 = new Score(game2, player1, 0.5, LocalDateTime.now());
-			Score score4 = new Score(game2, player2, 0.5, LocalDateTime.now());
-			Score score5 = new Score(game3, player2, 1.0, LocalDateTime.now());
-			Score score6 = new Score(game3, player3, 0.0, LocalDateTime.now());
-			Score score7 = new Score(game4, player1, 0.5, LocalDateTime.now());
-			Score score8 = new Score(game4, player2, 0.5, LocalDateTime.now());
+			Score score1 = new Score(game1, player1, 1.0);
+			Score score2 = new Score(game1, player2, 0.0);
+			Score score3 = new Score(game2, player1, 0.5);
+			Score score4 = new Score(game2, player2, 0.5);
+			Score score5 = new Score(game3, player2, 1.0);
+			Score score6 = new Score(game3, player3, 0.0);
+			Score score7 = new Score(game4, player1, 0.5);
+			Score score8 = new Score(game4, player2, 0.5);
 
 			scoreRepository.save(score1);
 			scoreRepository.save(score2);

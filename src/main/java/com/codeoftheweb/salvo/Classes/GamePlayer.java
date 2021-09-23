@@ -1,6 +1,11 @@
 package com.codeoftheweb.salvo.Classes;
 
+import com.codeoftheweb.salvo.Interfaces.SalvoRepository;
+import com.codeoftheweb.salvo.Interfaces.ScoreRepository;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -34,7 +39,9 @@ public class GamePlayer {
     // SALVO
 
     @OneToMany(mappedBy="gamePlayer", fetch=FetchType.EAGER)
+    //@OrderBy
     List<Salvo> salvos = new ArrayList<>();
+
 
     //CONSTRUCTORES
     public GamePlayer() { }
@@ -153,15 +160,15 @@ public class GamePlayer {
 
         // Se obtienen las locations de cada barco del Gameplayer
         List<String> carrierLocations = shipLocations("carrier");
-        System.out.println(carrierLocations);
+        //System.out.println(carrierLocations);
         List<String> battleshipLocations = shipLocations("battleship");
-        System.out.println(battleshipLocations);
+        //System.out.println(battleshipLocations);
         List<String> submarineLocations = shipLocations("submarine");
-        System.out.println(submarineLocations);
+        //System.out.println(submarineLocations);
         List<String> destroyerLocations = shipLocations("destroyer");
-        System.out.println(destroyerLocations);
+        //System.out.println(destroyerLocations);
         List<String> patrolboatLocations = shipLocations("patrolboat");
-        System.out.println(patrolboatLocations);
+        //System.out.println(patrolboatLocations);
 
         // Forma 2 de obtener barcos
         /*Ship carrier1 = this.getShips().stream().filter(sh-> sh.getType().equals("carrier")).findFirst().get();
@@ -182,6 +189,12 @@ public class GamePlayer {
 
         // 1er For para pasar por los turnos
         // Se obtienen tambien los tiros del gameplayer oponente
+
+        // Opcion por si La relación Salvo da duplicado en List, se deja en Set
+
+
+        //List <Salvo> listaSalvoOrdenados = new ArrayList<>(this.getOpponent().getSalvos());
+
         for(Salvo salvo : this.getOpponent().getSalvos()) {
 
             // Para agregar luego a la lista "List<Map<String, Object>> listHits"
@@ -197,6 +210,7 @@ public class GamePlayer {
             int submarineHits = 0;
             int destroyerHits = 0;
             int patrolboatHits = 0;
+
             int missedShots = salvo.getSalvoLocations().size();
 
             // Agrupa los datos necesarios por turno
@@ -288,17 +302,146 @@ public class GamePlayer {
         dto.put("id", this.getId());
         dto.put("player", this.getPlayer().makePlayerDTO());
 
-
         // Prueba GetScore sin DTO en GameDTO
         /*if(this.getScore() != null){
             //dto.put("score", this.getScore().getScore());
             dto.put("score", this.getScore().getScore());
         }*/
 
-
-
         return dto;
     }
+
+    /*
+
+    private String Scoring (GamePlayer gamePlayer, Player player, LocalDateTime localDateTime ){
+        localDateTime=LocalDateTime.now();
+
+
+    }
+    */
+
+    public String gamestate () {
+
+        String gamestate = "UNDEFINED";
+
+        GamePlayer currentPlayer=this;
+        GamePlayer opponent = this.getOpponent();
+
+        // Obtener player 1
+        GamePlayer player1 = this.getGame().getGamePlayers().stream().min(Comparator.comparing(gamePlayer -> gamePlayer.getId())).get();
+        //System.out.println("player1:" + player1.getId());
+
+        // Obtener player 2
+        GamePlayer player2 = this.getGame().getGamePlayers().stream().max(Comparator.comparing(gamePlayer -> gamePlayer.getId())).get();
+        //System.out.println("player2:" + player2.getId());
+
+        int player1Turns = player1.getSalvos().size();
+        int player2Turns = player2.getSalvos().size();
+
+
+
+        // PLACESHIPS STATE
+            if (this.getShips().size() != 5) {
+                gamestate = "PLACESHIPS";
+                return gamestate;
+            }
+
+        // WAITING FOR OPPONENT STATE
+            if (this.getOpponent() == null) {
+                gamestate = "WAITINGFOROPP";
+                return gamestate;
+            }
+
+        // WAIT STATE
+            if (this.getOpponent().getShips().size() != 5) {
+                gamestate =  "WAIT";
+                return gamestate;
+            }
+
+
+        // TIE, WIN Y LOST STATE
+
+        if (this.getId()==player1.getId()){
+            if (this.barcosHundidos(opponent, currentPlayer)){
+                if (player1Turns>player2Turns){
+                    gamestate =  "WAIT";
+                    return gamestate;
+                }
+                else if (this.barcosHundidos(currentPlayer,opponent)){
+                    gamestate =  "TIE";
+                    return gamestate;
+
+                }
+                else {
+                    gamestate =  "WON";
+                    return gamestate;
+                }
+            }
+            if (this.barcosHundidos(currentPlayer,opponent)){
+                gamestate =  "LOST";
+                return gamestate;
+            }
+        }
+        else {
+            if(this.barcosHundidos(opponent,currentPlayer)){
+                if (this.barcosHundidos(currentPlayer,opponent)){
+                    gamestate = "TIE";
+                    return gamestate;
+                }
+                else {
+                    gamestate = "WON";
+                    return gamestate;
+                }
+            }
+            if(this.barcosHundidos(currentPlayer,opponent)){
+                if (player1Turns==player2Turns){
+                    gamestate = "LOST";
+                    return gamestate;
+                }
+            }
+        }
+
+
+
+        //WAIT STATE
+
+            if (player1Turns > player2Turns && this.getId() == player1.getId()) {
+                gamestate =  "WAIT";
+                return gamestate;
+            }
+
+            if (player1Turns == player2Turns && this.getId() == player2.getId()) {
+                gamestate =  "WAIT";
+                return gamestate;
+            }
+
+
+
+        // PLAY STATE
+            if (this.getOpponent().getShips().size() == 5) {
+                gamestate =  "PLAY";
+                return gamestate;
+            }
+
+
+        return gamestate;
+    }
+
+    private boolean barcosHundidos(GamePlayer gpBarcos, GamePlayer gpSalvos) {
+
+        GamePlayer opponent = this.getOpponent();
+
+        if (!gpBarcos.getShips().isEmpty() && !gpSalvos.getSalvos().isEmpty()) {
+        return  gpSalvos.getSalvos()
+                    .stream().flatMap(salvo -> salvo.getSalvoLocations().stream()).collect(Collectors.toList())
+                    .containsAll(gpBarcos.getShips()
+                            .stream().flatMap(ship -> ship.getShipLocations().stream())
+                            .collect(Collectors.toList()));
+        }
+        return false;
+    }
+
+
 
     // Game_view DTO game
     // Utiliza Ships DTO
@@ -306,7 +449,7 @@ public class GamePlayer {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", this.getGame().getId());
         dto.put("created", this.getGame().getCreationDate());
-        dto.put("gameState", "PLACESHIPS");
+        dto.put("gameState", gamestate());
         dto.put("gamePlayers",
                 this.getGame().getGameplayers()
                         .stream()
@@ -319,37 +462,11 @@ public class GamePlayer {
                 .flatMap(gamePlayerSalvos -> gamePlayerSalvos.getSalvos().stream()
                         .map(s -> s.makeSalvoDTO())).collect(Collectors.toList()));
 
-                // Usando For
-                    /*
-                    List<Map<String, Object>> listaux = new  ArrayList<>();
 
-                            // "Gameplayer gp" es el nombre que va a tener cada recorrido >
-                            // dentro de lo que va a la derecha de los ":"
-                            // ,al igual que "Salvo s"
-
-                    for (GamePlayer gp: gamePlayer.getGame().gamePlayers) {
-                        for (Salvo s:gp.getSalvos()){
-                            listaux.add(s.makeSalvoDTO(s));
-                        }
-                    }
-                    dto.put("salvoes2", listaux);*/
-                // Usando forEach - PROBAR intento 1
-                    /*List<List<Integer>> listabidimensional = new ArrayList<List<Integer>>(Arrays.asList(
-                                    new ArrayList<Integer>(Arrays.asList(1,2)),
-                                    new ArrayList<Integer>(Arrays.asList(3,4))
-                            ));
-                            System.out.println(listabidimensional);
-                            List<Integer> listaAux = new ArrayList<>();
-                            for (List<Integer> l1:listabidimensional){
-                                for(Integer l2:l1){
-                                    listaAux.add(l2);
-                                }
-                            }
-                            dto.put("salvoes2", listaAux);*/
-
-        Map<String, Object> hits = new LinkedHashMap<String, Object>();
 
         GamePlayer opponent = this.getOpponent();
+
+        Map<String, Object> hits = new LinkedHashMap<String, Object>();
 
         // Evita el error que te tira al entrar a un game sin un oponente
         if(opponent == null) {

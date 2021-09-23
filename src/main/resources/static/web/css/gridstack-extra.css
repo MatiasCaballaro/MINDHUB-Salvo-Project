@@ -827,7 +827,7 @@
 }
 
 .grid-stack.grid-stack-10 > .grid-stack-item[data-gs-x='5'] {
-  left: 50%;
+  left: 25%;
 }
 
 .grid-stack.grid-stack-10 > .grid-stack-item[data-gs-min-width='5'] {

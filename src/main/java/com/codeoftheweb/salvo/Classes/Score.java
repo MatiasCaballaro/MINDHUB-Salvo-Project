@@ -32,11 +32,11 @@ public class Score {
     public Score() {
     }
 
-    public Score(Game game, Player player, Double score, LocalDateTime finishDate) {
+    public Score(Game game, Player player, Double score) {
         this.game = game;
         this.player = player;
         this.score = score;
-        this.finishDate = finishDate;
+        this.finishDate = LocalDateTime.now();
     }
 
     // SETTERS Y GETTERS

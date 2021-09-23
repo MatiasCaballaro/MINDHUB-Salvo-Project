@@ -35,6 +35,9 @@ public class SalvoController {
     private SalvoRepository salvoRepository;
 
     @Autowired
+    private ScoreRepository scoreRepository;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
 
 
@@ -114,6 +117,19 @@ public class SalvoController {
         }
 
         else  {
+
+            if(gamePlayer.gamestate().equals("WON")){
+                Score puntaje= new Score(gamePlayer.getGame(),gamePlayer.getPlayer(),1.0);
+                scoreRepository.save(puntaje);
+            }
+            else if (gamePlayer.gamestate().equals("TIE")){
+                Score puntaje= new Score(gamePlayer.getGame(),gamePlayer.getPlayer(),0.5);
+                scoreRepository.save(puntaje);
+            }
+            else if (gamePlayer.gamestate().equals("LOST")){
+                Score puntaje= new Score(gamePlayer.getGame(),gamePlayer.getPlayer(),0.0);
+                scoreRepository.save(puntaje);
+            }
             return new ResponseEntity<>(gamePlayer.makeGameViewDTO(gamePlayer), HttpStatus.ACCEPTED);
         }
 
@@ -520,7 +536,7 @@ public class SalvoController {
 
         // Más de un salvo y menos o igual 5
         if(!(salvo.getSalvoLocations().size()>0 && salvo.getSalvoLocations().size()<6)) {
-            return new ResponseEntity<>(makeMap("error","Tienes que tener al menos un disparo, y no más de 5"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error","Tienes que realizar al menos un disparo, y no más de 5"), HttpStatus.FORBIDDEN);
         }
 
 
@@ -557,6 +573,10 @@ public class SalvoController {
 
 
 }
+
+
+
+
 
 
 

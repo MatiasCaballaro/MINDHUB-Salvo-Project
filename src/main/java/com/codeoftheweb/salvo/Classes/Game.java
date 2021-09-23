@@ -120,6 +120,10 @@ public class Game {
 
         }
 
+    public void addScore(Score score) {
+        scores.add(score);
+    }
+
 
 }
 

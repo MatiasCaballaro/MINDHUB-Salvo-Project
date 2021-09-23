@@ -1,14 +1,283 @@
-body {
-    background: url(../img/back2.jpg);
-    font-family: 'Dosis', sans-serif;
+@media (max-width: 576px) {
+    
+    .preCurrentPlayer {
+        display:none !important;
+    }
+
+
+
+}
+
+@font-face {
+      font-family: 'Green_Energy';
+      src: url('fonts/Green_Energy.ttf');
+      font-style: normal;
+      font-weight: normal;
+    }
+
+
+
+body{
+        background: url(https://wallpapercave.com/download/warship-wallpaper-hd-wp2874399)no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        bottom: 0px;
+        left: 0px;
+        background-attachment: fixed;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+        /* width: 100%; */
+        -ms-transform: translateZ(0);
+}
+
+body::-webkit-scrollbar {
+    width: 10px;     /* Tamaño del scroll en vertical */
+    height: 5px;
+    background:#000;     /* Tamaño del scroll en horizontal */
+    /* display: none;  /* Ocultar scroll */
+}
+
+/* Ponemos un color de fondo y redondeamos las esquinas del thumb */
+body::-webkit-scrollbar-thumb {
+    background: #ffc107;
+    border-radius: 4px;
+}
+
+/* Cambiamos el fondo y agregamos una sombra cuando esté en hover */
+body::-webkit-scrollbar-thumb:hover {
+    background: #ffc107;
+    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+/* Cambiamos el fondo cuando esté en active */
+body::-webkit-scrollbar-thumb:active {
+    background-color: #ffc107;
+}
+
+/* Ponemos un color de fondo y redondeamos las esquinas del track */
+body::-webkit-scrollbar-track {
+    background:#000;
+    border-radius: 4px;
+}
+
+/* Cambiamos el fondo cuando esté en active o hover */
+body::-webkit-scrollbar-track:hover, body::-webkit-scrollbar-track:active {
+  background: #000;
+}
+
+    
+
+.btn{
+    transition:2
+}
+
+h1,h2,h3,h4,h5,h6, .movingMsgBig, #gamesList thead tr, #scoreBoard thead tr{
+    font-family: 'Green_Energy' !important;
+    }
+
+.container-fluid {
+    padding:0 !important;
 }
 
 .bannerTitle {
-    margin: 15px auto 0;
+    /* margin: 25px auto 0 !important; */
+}
+
+#loginBlock.row {
+    margin-top: 0px !important;
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    background: rgba(0,0,0,0.6);
+    width: 100%;
+    padding: 15px;
+    z-index:99;
+}
+
+#login-form input[type=email], #login-form input[type=password], #login-form input:-internal-autofill-selected 
+{
+    border-color:rgba(0,0,0,0.7);
+    background-color: rgba(0,0,0,0.5) !important;
+    color: #ffc107;
+    transform: translateZ(0);
+}
+
+
+
+
+
+@-webkit-keyframes glow2 {
+  from {
+    box-shadow: 0 0 5px rgba(0,0,0,0.6), 0 0 10px rgba(0,0,0,0.6), 0 0 15px #ff, 0 0 20px rgba(0,0,0,0.6);
+  }
+
+  to {
+    box-shadow: 0 0 10px #ffc107, 0 0 15px #ffc107, 0 0 20px #ffc107, 0 0 25px #ffc107;
+  }
+}
+
+
+
+#login-form input[type=email]:focus, #login-form input[type=password]:focus
+{   
+    border-color:rgba(0,0,0,0.7);
+    box-shadow:none; 
+    background-color: rgba(0,0,0,0.5);
+    animation: glow2 1s ease-in-out infinite alternate;
+    transform: translateZ(0);
+}
+
+#login-form .btn-info, #logout-form .btn-info{
+    background-color: #ffc107;
+    border-color: #ffc107 ;
+    font-family:"Green_Energy";
+    font-weight:bold
+}
+
+#login-form .btn-info:hover, #login-form .btn-info:focus, #logout-form .btn-info:hover {
+    color: #ffc107 !important;
+    background-color: #000 !important;
+    border-color: #ffc107;
+    box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 25%);
+}
+
+#createGameForm #createGame {
+    font-family:"Green_Energy";
+    font-size:1.5em;
+    background-color:#000 !important;
+    border-color: #ffc107;
+    color: #ffc107;
+    font-weight:bold;
+    border-radius:5px;
+    box-shadow:0px 0px 5px #000;
+    margin: 0;
+    float: right;
+}
+
+#createGameForm #createGame:hover{
+    background-color:#ffc107 !important;
+    border-color: #ffc107;
+    color: #000;
+    box-shadow:0px 0px 5px #ffc107;
+}
+
+#gamesList .btn-warning, #gamesList .btn-info  {
+    width:150px !important;
+}
+
+#gamesList .btn-warning:hover{
+    font-weight:bold;
+}
+
+#gamesList .btn-info  {
+    background-color:#000;
+    border-color: #ffc107;
+}
+
+#gamesList .btn-info:hover  {
+    background-color:#222;
+    border-color: #ffc107;
+    font-weight:bold;
+}
+
+
+#logout-form {
+    display: inline-block;
+    margin-left:0px;
+}
+
+.game-view #logout-form {
+    display: inline-block;
+}
+
+.currentPlayerContainer {
+    color:#fff;
+    line-height:2.5em;
+}
+
+
+
+.textCenter.whiteColor h2, #currentPlayer{
+    animation: glow 1s ease-in-out infinite alternate;
+    transform: translateZ(0);
+}
+
+@-webkit-keyframes glow {
+  from {
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff, 0 0 20px #fff;
+  }
+
+  to {
+    text-shadow: 0 0 2px #ffc107, 0 0 5px #ffc107, 0 0 8px #ffc107, 0 0 10px #ffc107;
+  }
+}
+
+
+#gamesList thead tr, #scoreBoard thead tr {
+    text-shadow: 0 0 5px #fff;
+}
+
+
+#gamesList thead tr{
+    font-size: 1.3em;
+}
+
+
+#scoreBoard thead tr{
+    font-size: 1.4em;
+}
+
+#scoreBoard {
+    margin-bottom: 20px !important;
+}
+
+.table-dark th, .table-dark thead th:first-child, #scoreBoard > tbody > tr > td:first-child{
+padding-left: 20px;
+}
+
+
+#signupSuccess, #loginSuccess, #logoutSuccess, #gameCreatedSuccess, #gameJoinedSuccess, #okShips, #okSalvo {
+    border: 2px solid #000 !important;
+    background-color: #ffc107 !important;
+    color:#000 !important;
+    font-weight:bolder;
+    margin:10px 0;
+}
+
+#loginFailed, #errorSignup, #errorShips, #errorSalvo {
+    border: 2px solid #000 !important;
+    background-color: indianred;
+    font-weight:bolder;
+    margin:10px 0;
+}
+
+.game-view {
+    background-color:rgba(0,0,0,0.3);
+    min-height: 100vh;
+    /* overflow: initial; */
+}
+
+
+#battleGrids > div.row{
+    margin:30px 0 !important;
+    padding:15px 0;
+}
+
+.bannerTitle {
+    margin: 75px auto 0;
     text-align: center;
-    background: #00000038;
+    background: none;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
+}
+
+.game-view .bannerTitle {
+    margin:0;
 }
 
 .blockInline {
@@ -18,12 +287,12 @@ body {
 }
 
 #gameStateBlock {
-
-    background-color: #212529;
+    display: inline-block;
     padding: 3px;
     margin-bottom: 4px;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
+    line-height: 54px;
+    /* border-bottom-left-radius: 20px; */
+    /* border-bottom-right-radius: 20px; */
 }
 
 .labelGame {
@@ -32,6 +301,7 @@ body {
     font-size: 1.6em;
     font-weight: 200;
 }
+
 .labelGameBig {
     color: #f8f9fa;
     font-weight: 600;
@@ -43,10 +313,13 @@ body {
     margin-top: 10px;
 }
 
-.gridTopLabel {
+.gridTopLabel, #currentPlayerName, #OpponentPlayerName {
     text-transform: uppercase;
     font-weight: 600;
     margin: 0;
+    color:#ffc107;
+    text-shadow: 2px 2px 5px #000, 0 0 3px #000;;
+    font-size:1.2em;
 }
 
 .shipPoslabel {
@@ -61,7 +334,8 @@ body {
 
 .bannerImageGames {
     width: 50%;
-    margin-top: 8px;
+    /* margin-top: 8px; */
+    filter: drop-shadow(5px 5px 5px #000) drop-shadow(2px 2px 5px #000);
 }
 
 #loginFailed, #errorSignup, #errorShips, #errorSalvo {
@@ -106,9 +380,6 @@ body {
     opacity: 0.9;
 }
 
-#currentPlayerName {
-
-}
 
 .shipCell {
     /*background-color: yellowgreen;*/
@@ -117,14 +388,12 @@ body {
 .salvoCell {
     background-image: url(../img/target.png);
     background-size: cover;
-    /* background-color: #87cefa00; */
     color: white;
 }
 
 .salvoCellSelf {
     background-image: url(../img/targetself.png);
     background-size: cover;
-    /* background-color: #87cefa00; */
     color: #888888;
 }
 
@@ -143,16 +412,17 @@ body {
 
 #gamePlayerDetails {
     text-align: center;
+    width: 100%;
 }
 
 .textCenter {
     text-align: center;
 }
 
+
 /*SHIP PLACEMENT*/
 
 #grid1 {
-
 }
 
 .grid-stack-item-content {
@@ -166,42 +436,53 @@ body {
 
 .carrierHor {
     background-image: url(../img/carrierhor.png);
+    background-size: contain;
 }
 
 .carrierVer {
     background-image: url(../img/carrierver.png);
+    background-size: contain;
 }
 
 .battleshipHor {
     background-image: url(../img/battleshiphor.png);
+    background-size: contain;
 }
 
 .battleshipVer {
     background-image: url(../img/battleshipver.png);
+    background-size: contain;
 }
 
 .submarineHor {
     background-image: url(../img/submarinehor.png);
+    background-size: contain;
 }
 
 .submarineVer {
     background-image: url(../img/submarinever.png);
+    background-size: contain;
 }
 
 .destroyerHor {
     background-image: url(../img/destroyerhor.png);
+    background-size: contain;
 }
 
 .destroyerVer {
     background-image: url(../img/destroyerver.png);
+    background-size: contain;
 }
 
 .patrolboatHor {
     background-image: url(../img/patrolboathor.png);
+    background-size: contain;
+
 }
 
 .patrolboatVer {
     background-image: url(../img/patrolboatver.png);
+    background-size: contain;
 }
 
 .sidebar {
@@ -222,6 +503,7 @@ body {
 .backShipPlacement {
     background-image: url(../img/backshipplacement.gif);
 }
+
 .title {
     text-align: center;
 }
@@ -245,18 +527,20 @@ body {
 }
 
 .gameStateLabelBig {
-    font-size: 1.3em;
+    font-size: 1.1em;
     font-weight: 600;
     color: #ffc107;
 }
 
 .gameStateLabel {
     color: #dee2e6;
+    /* display: inline-block; */
 }
 
 .divTableRow {
     display: table-row;
 }
+
 .divTableHeading {
     background-color: #EEE;
     display: table-header-group;
@@ -298,7 +582,9 @@ img {
     user-select: none;
 }
 
-img{-webkit-user-drag: none;}
+img{
+    -webkit-user-drag: none;
+}
 
 button:focus {
     outline: none;
@@ -323,13 +609,13 @@ button:focus {
 }
 
 #placingShipsBoard {
-    display: none;
+    /* display: none; */
     background: #000000bf;
     width: 80%;
     margin: 0 auto;
     padding: 25px;
     border-radius: 1.5em;
-    margin-top: 15px;
+    margin-top: 50px;
 }
 
 #gameRecordOppTable, #gameRecordSelfTable {
@@ -352,7 +638,8 @@ button:focus {
 }
 
 #username, #password {
-    background-color: #f8f9fa94;
+    background-color: rgba(255,255,255,0.4);
+    color: #ffc107;
 }
 
 .whiteColor {
@@ -392,7 +679,6 @@ button:focus {
 }
 
 .placeshipsInstructions {
-
     width: 75%;
     margin: 10px auto 10px;
     font-size: 1.2em;
@@ -453,6 +739,11 @@ button:focus {
 
 #shipsLeftIcons, #shipsLeftIconsOpp {
     margin-bottom: 8px;
+    
+}
+
+#shipsLeftIcons img, #shipsLeftIconsOpp img{
+   filter:drop-shadow(0.25rem 0.25rem 0.3rem rgba(0, 0, 0, 1));
 }
 
 @media (min-width: 930px) {
@@ -461,20 +752,6 @@ button:focus {
         -ms-flex: 0 0 50%;
         flex: 0 0 50%;
         max-width: 50%;
-    }
-}
-
-@media (max-width: 929px) and (min-width: 576px) {
-    .col-sm-6 {
-
-        position: relative;
-        width: 100%;
-        min-height: 1px;
-        padding-right: 15px;
-        padding-left: 15px;
-        -webkit-box-flex: unset;
-        flex: none;
-        max-width: unset;
     }
 }
 
@@ -508,6 +785,23 @@ button:focus {
     border: 1px dashed #eab105;
     border-left-width: 0;
     border-top-width: 0;
+}
+
+
+
+
+@media (max-width: 929px) and (min-width: 576px) {
+
+    .col-sm-6 {
+            position: relative;
+            width: 100%;
+            min-height: 1px;
+            padding-right: 15px;
+            padding-left: 15px;
+            -webkit-box-flex: unset;
+            flex: none;
+            max-width: unset;
+        }
 
 }
 
