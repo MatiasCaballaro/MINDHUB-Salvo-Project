@@ -96,6 +96,7 @@ function refreshGameView(_url) {
             }
 
             if (gamePlayerData.gameState === "WON"){
+                $('#placingShipsBoard').hide();
                 showSelf(gamePlayerData);
                 makeGameRecordTable(gamePlayerData.hits.opponent, "gameRecordOppTable");
                 makeGameRecordTable(gamePlayerData.hits.self, "gameRecordSelfTable");
@@ -104,6 +105,7 @@ function refreshGameView(_url) {
                 console.log("yes you won");
             }
             if (gamePlayerData.gameState === "TIE"){
+                $('#placingShipsBoard').hide();
                 showSelf(gamePlayerData);
                 makeGameRecordTable(gamePlayerData.hits.opponent, "gameRecordOppTable");
                 makeGameRecordTable(gamePlayerData.hits.self, "gameRecordSelfTable");
@@ -112,6 +114,7 @@ function refreshGameView(_url) {
                 console.log("TIED MATCH");
             }
             if (gamePlayerData.gameState === "LOST"){
+                $('#placingShipsBoard').hide();
                 showSelf(gamePlayerData);
                 makeGameRecordTable(gamePlayerData.hits.opponent, "gameRecordOppTable");
                 makeGameRecordTable(gamePlayerData.hits.self, "gameRecordSelfTable");
