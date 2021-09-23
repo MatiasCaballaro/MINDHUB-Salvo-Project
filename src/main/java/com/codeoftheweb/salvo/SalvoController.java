@@ -565,7 +565,7 @@ public class SalvoController {
         int turnoActual= currentGamePlayer.getSalvos().size();
 
         // Salvo Constructor (GamePlayer gamePlayer, int turn, List<String> locations)
-        salvoRepository.save(new Salvo(currentGamePlayer, turnoActual+1,salvo.getSalvoLocations()));
+        salvoRepository.save(new Salvo(currentGamePlayer, turnoActual+1, salvo.getSalvoLocations()));
             // System.out.println("Turno de player 1 es: " + player1Turns + " y el del player 2 es: " + player2Turns );
         return new ResponseEntity<>(makeMap("Creado", "Se agregó turno "+(turnoActual+1)+" para el jugador " + currentGamePlayer.getId()), HttpStatus.CREATED);
 
