@@ -93,7 +93,7 @@ public class SalvoController {
 
     @RequestMapping("/game_view/{nn}")
     public ResponseEntity<Map<String,Object>> findGame(@PathVariable Long nn, Authentication authentication) {
-        GamePlayer gamePlayer = gamePlayerRepository.getById(nn);
+        GamePlayer gamePlayer = gamePlayerRepository.findById(nn).get();
         Player currentPlayer = playerRepository.findByUserName(authentication.getName());
 
         /*
@@ -240,7 +240,7 @@ public class SalvoController {
         }
         else {
 
-            Game currentGame = gameRepository.getById(gameID);
+            Game currentGame = gameRepository.findById(gameID).get();
 
             Player currentPlayer=playerRepository.findByUserName(authentication.getName());
 
@@ -290,7 +290,7 @@ public class SalvoController {
             return new ResponseEntity<>(makeMap("error", "No existe el GamePlayer"), HttpStatus.FORBIDDEN);
         }
 
-        GamePlayer currentGamePlayer = gamePlayerRepository.getById(gamePlayerId);
+        GamePlayer currentGamePlayer = gamePlayerRepository.findById(gamePlayerId).get();
 
         if (currentGamePlayer.getPlayer() != currentPlayer) {
             return new ResponseEntity<>(makeMap("error", "No tienes permiso, y no está permitido la manganeta ;)"), HttpStatus.FORBIDDEN);
@@ -333,7 +333,7 @@ public class SalvoController {
             return new ResponseEntity<>(makeMap("error", "No existe el GamePlayer"), HttpStatus.FORBIDDEN);
         }
 
-        GamePlayer currentGamePlayer = gamePlayerRepository.getById(gamePlayerId);
+        GamePlayer currentGamePlayer = gamePlayerRepository.findById(gamePlayerId).get();
 
         // Validación si el player no es el mismo que el gameplayer
         if (currentGamePlayer.getPlayer() != currentPlayer) {
@@ -462,7 +462,7 @@ public class SalvoController {
             return new ResponseEntity<>(makeMap("error", "No existe el GamePlayer"), HttpStatus.FORBIDDEN);
         }
 
-        GamePlayer currentGamePlayer = gamePlayerRepository.getById(gamePlayerId);
+        GamePlayer currentGamePlayer = gamePlayerRepository.findById(gamePlayerId).get();
 
         if (currentGamePlayer.getPlayer() != currentPlayer) {
             return new ResponseEntity<>(makeMap("error", "No tienes permiso, y no está permitido la manganeta ;)"), HttpStatus.FORBIDDEN);
@@ -498,7 +498,7 @@ public class SalvoController {
             return new ResponseEntity<>(makeMap("error", "No existe el GamePlayer"), HttpStatus.FORBIDDEN);
         }
 
-        GamePlayer currentGamePlayer = gamePlayerRepository.getById(gamePlayerId);
+        GamePlayer currentGamePlayer = gamePlayerRepository.findById(gamePlayerId).get();
 
         // Validación si el player no es el mismo que el gameplayer
         if (currentGamePlayer.getPlayer() != currentPlayer) {
