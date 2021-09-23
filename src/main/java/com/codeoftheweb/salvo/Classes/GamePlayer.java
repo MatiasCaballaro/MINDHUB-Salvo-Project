@@ -39,8 +39,8 @@ public class GamePlayer {
     // SALVO
 
     @OneToMany(mappedBy="gamePlayer", fetch=FetchType.EAGER)
-    //@OrderBy
-    List<Salvo> salvos = new ArrayList<>();
+    @OrderBy
+    Set<Salvo> salvos;
 
 
     //CONSTRUCTORES
@@ -112,16 +112,13 @@ public class GamePlayer {
 
     // GETTERS Y SETTERS SALVO
 
-    public List<Salvo> getSalvos() {
+    public Set<Salvo> getSalvos() {
         return salvos;
     }
 
-    public void setSalvos(List<Salvo> salvos) {
+    public void setSalvos(Set<Salvo> salvos) {
         this.salvos = salvos;
     }
-
-
-
 
 
     // OBTENER OPONENTE

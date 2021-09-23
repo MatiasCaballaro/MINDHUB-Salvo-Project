@@ -83,7 +83,7 @@ function refreshGameView(_url) {
             }
 
             if (gamePlayerData.gameState === "WAITINGFOROPP"){
-                $('#placingShipsBoard').hide();
+
                 $('#battleGrids').show('puff', 'slow');
                 waitState = true;
                 setTimeout(
