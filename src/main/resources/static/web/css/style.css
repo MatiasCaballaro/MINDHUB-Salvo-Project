@@ -269,7 +269,7 @@ padding-left: 20px;
 }
 
 .bannerTitle {
-    margin: 75px auto 0;
+    margin: 20px 0 20px 0;
     text-align: center;
     background: none;
     border-top-left-radius: 20px;
@@ -331,7 +331,7 @@ padding-left: 20px;
 .bannerImageGames {
     width: 50%;
     /* margin-top: 8px; */
-    filter: drop-shadow(5px 5px 5px #000) drop-shadow(2px 2px 5px #000);
+    filter: drop-shadow(1px 1px 1px #fff) drop-shadow(2px 2px 5px #000);
 }
 
 @media (max-width:1367px) {

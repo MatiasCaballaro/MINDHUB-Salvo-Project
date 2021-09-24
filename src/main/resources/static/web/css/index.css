@@ -1,0 +1,75 @@
+@font-face {
+      font-family: 'Green_Energy';
+      src: url('fonts/Green_Energy.ttf');
+      font-style: normal;
+      font-weight: normal;
+    }
+
+body  {
+    background-color: #ffc107;
+}
+
+#myVideo {
+  position: fixed;
+  right: 0;
+  bottom: 12px;
+  min-width: 100%;
+  min-height: 100%;
+  margin-top: -50px;
+}
+
+#myvideo::after{
+background:rgba(0,0,0,0.4)
+}
+
+/* Add some content at the bottom of the video/page */
+.content {
+  position: fixed;
+  right: 0;
+  bottom: 12px;
+  min-width: 100%;
+  min-height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index:5;
+  color: #f1f1f1;
+  width: 100%;
+  text-align:center;
+}
+
+a.logo {
+    display: block;
+    text-align: center;
+    width: 100%;
+    margin: 100px 0 100px;
+}
+
+.bannerImageGames{
+    width: 50%;
+    filter: drop-shadow(1px 1px 1px #fff) drop-shadow(2px 2px 5px #000);
+}
+
+
+
+/* Style the button used to pause/play the video */
+#myBtn {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    font-family: "Green_Energy";
+    font-weight: bold;
+    width:200px;
+    height:40px;
+    font-family: 'Green_Energy' !important;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+#myBtn:hover {
+    color: #ffc107 !important;
+    background-color: #000 !important;
+    border-color: #ffc107;
+    box-shadow:  0 0 0 0.1rem rgb(255 193 7 / 50%), 0 0 0 0.23rem rgb(255 193 7 / 25%), 0 0 0 0.34rem rgb(255 193 7 / 10%);
+}
