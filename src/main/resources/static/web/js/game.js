@@ -353,7 +353,7 @@ function postSalvo (postUrl) {
                 function()
                 {
                     refreshGameView(makeUrl());
-                }, 4000);
+                }, 2000);
         })
         .fail(function (response) {
             console.log(response);

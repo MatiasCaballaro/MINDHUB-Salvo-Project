@@ -84,6 +84,10 @@ h1,h2,h3,h4,h5,h6, .movingMsgBig, #gamesList thead tr, #scoreBoard thead tr{
     padding:0 !important;
 }
 
+
+#currentPlayerName, #OpponentPlayerName{Font-family: monospace !important;font-size: 1.0em !important;color: #fff !important;margin-bottom: 15px !important;}
+
+
 .bannerTitle {
     /* margin: 25px auto 0 !important; */
 }
@@ -320,8 +324,9 @@ padding-left: 20px;
     font-weight: 600;
     margin: 0;
     color:#ffc107;
-    text-shadow: 2px 2px 5px #000, 0 0 3px #000;;
+    text-shadow: 2px 2px 5px #000, 0 0 3px #000;
     font-size:1.2em;
+    font-family: !important;
 }
 
 .shipPoslabel {
