@@ -132,6 +132,7 @@ public class GamePlayer {
         return opponent;
     }
 
+
     // OBTENER SHIP LOCATIONS POR NOMBRE
     private List<String> shipLocations(String type) {
 
