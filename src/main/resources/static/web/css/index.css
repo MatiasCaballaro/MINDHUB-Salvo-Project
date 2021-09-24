@@ -48,6 +48,16 @@ a.logo {
     filter: drop-shadow(1px 1px 1px #fff) drop-shadow(2px 2px 5px #000);
 }
 
+.company{
+  width:100%;
+  position: absolute;
+  bottom:0;
+  text-align:center
+}
+
+.companylogo {
+  width:175px;
+}
 
 
 /* Style the button used to pause/play the video */
