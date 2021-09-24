@@ -113,7 +113,7 @@ public class SalvoController {
         // opcion 2
         if(gamePlayer.getPlayer() != currentPlayer) {
             return new ResponseEntity<>
-                    (makeMap("error", "Gameplayer no pertenece al usuario actual, no hagas trampa pilluelo"), HttpStatus.FORBIDDEN);
+                    (makeMap("error", "Do not cheat"), HttpStatus.FORBIDDEN);
         }
 
         else  {
@@ -186,11 +186,11 @@ public class SalvoController {
             @RequestParam (value="email") String userName, @RequestParam (value="password")String password) {
 
         if (userName.isEmpty() || password.isEmpty() ) {
-            return new ResponseEntity<>(makeMap("error", "Falta completar Datos"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error", "Incomplete Data"), HttpStatus.FORBIDDEN);
         }
 
         if (playerRepository.findByUserName(userName) !=  null) {
-            return new ResponseEntity<>(makeMap("error", "Usuario Existente"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error", "User already exist"), HttpStatus.FORBIDDEN);
         }
 
         Player newPlayer= playerRepository.save(new Player(userName, passwordEncoder.encode(password)));
@@ -204,13 +204,13 @@ public class SalvoController {
 
 
         if (isGuest(authentication)) {
-            return new ResponseEntity<>(makeMap("error", "No estás logueado"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error", "You are not logged"), HttpStatus.FORBIDDEN);
         }
 
         Player currentPlayer = playerRepository.findByUserName(authentication.getName());
 
         if(currentPlayer==null){
-            return new ResponseEntity<>(makeMap("error", "No estás logueado"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error", "You are not logged"), HttpStatus.FORBIDDEN);
         }
 
         // CREATE GAME
@@ -231,12 +231,12 @@ public class SalvoController {
 
         // Comprobación de autenticación
         if (isGuest(authentication)) {
-            return new ResponseEntity<>(makeMap("error", "No estás logueado"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error", "You are not logged"), HttpStatus.FORBIDDEN);
         }
 
         // Comprobación si existe el game
         if (!gameRepository.existsById(gameID)){
-            return new ResponseEntity<>(makeMap("error", "No existe Game"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error", "No such game"), HttpStatus.FORBIDDEN);
         }
         else {
 
@@ -246,19 +246,19 @@ public class SalvoController {
 
             // Comprobación si el usuario está ok
             if(currentPlayer==null){
-                return new ResponseEntity<>(makeMap("error", "No estás logueado"), HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>(makeMap("error", "You are not logged"), HttpStatus.FORBIDDEN);
             }
 
             // Comprobación si el juego está lleno
             if (currentGame.getGamePlayers().size()>1){
-                return new ResponseEntity<>(makeMap("error", "el juego está lleno"), HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>(makeMap("error", "Game is full"), HttpStatus.FORBIDDEN);
             }
 
             // Comprobación si un jugador quiere unirse a un juego del que ya forma parte
             if (currentGame.getGameplayers().stream()
                     .anyMatch(gamePlayer -> gamePlayer.getPlayer().getId() == currentPlayer.getId()))
                      {
-                return new ResponseEntity<>(makeMap("error", "el jugador ya participa del juego"), HttpStatus.FORBIDDEN);}
+                return new ResponseEntity<>(makeMap("error", "You are already playing this game"), HttpStatus.FORBIDDEN);}
 
 
             GamePlayer newGamePlayer = gamePlayerRepository
@@ -274,7 +274,7 @@ public class SalvoController {
 
         // Comprobación de autenticación
         if (isGuest(authentication)) {
-            return new ResponseEntity<>(makeMap("error", "No estás logueado"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error", "you are not logged"), HttpStatus.FORBIDDEN);
         }
 
         Player currentPlayer = playerRepository.findByUserName(authentication.getName());
@@ -282,18 +282,18 @@ public class SalvoController {
 
         // Comprobación si el usuario está ok
         if (currentPlayer == null) {
-            return new ResponseEntity<>(makeMap("error", "No estás logueado"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error", "You are not logged"), HttpStatus.FORBIDDEN);
         }
 
         // Comprobación si existe el GamePlayer
         if (!gamePlayerRepository.existsById(gamePlayerId)) {
-            return new ResponseEntity<>(makeMap("error", "No existe el GamePlayer"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error", "No such Gameplayer"), HttpStatus.FORBIDDEN);
         }
 
         GamePlayer currentGamePlayer = gamePlayerRepository.findById(gamePlayerId).get();
 
         if (currentGamePlayer.getPlayer() != currentPlayer) {
-            return new ResponseEntity<>(makeMap("error", "No tienes permiso, y no está permitido la manganeta ;)"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error", "Do not cheat"), HttpStatus.FORBIDDEN);
         }
 
         // Opcion 1
@@ -317,7 +317,7 @@ public class SalvoController {
 
         // Comprobación de autenticación
         if (isGuest(authentication)) {
-            return new ResponseEntity<>(makeMap("error", "No estás logueado"), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(makeMap("error", "You are not logged"), HttpStatus.UNAUTHORIZED);
         }
 
         Player currentPlayer = playerRepository.findByUserName(authentication.getName());
@@ -325,24 +325,24 @@ public class SalvoController {
 
         // Comprobación si el usuario está ok
         if (currentPlayer == null) {
-            return new ResponseEntity<>(makeMap("error", "No estás logueado correctamente"), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(makeMap("error", "You are not correctly logged"), HttpStatus.UNAUTHORIZED);
         }
 
         // Comprobación si existe el GamePlayer
         if (!gamePlayerRepository.existsById(gamePlayerId)) {
-            return new ResponseEntity<>(makeMap("error", "No existe el GamePlayer"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error", "No such GamePlayer"), HttpStatus.FORBIDDEN);
         }
 
         GamePlayer currentGamePlayer = gamePlayerRepository.findById(gamePlayerId).get();
 
         // Validación si el player no es el mismo que el gameplayer
         if (currentGamePlayer.getPlayer() != currentPlayer) {
-            return new ResponseEntity<>(makeMap("error", "No tienes permiso, y no está permitido la manganeta ;)"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error", "Do not cheat"), HttpStatus.FORBIDDEN);
         }
 
         // Validación si ya tenía barcos asigandos
         if(currentGamePlayer.getShips().size()!=0){
-            return new ResponseEntity<>(makeMap("error", "Ya tienes barcos en este juego, no seas buitre"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error", "Do not cheat"), HttpStatus.FORBIDDEN);
         }
 
         //  opción 1 validación conjunta de cantidad de barcos (tipo) por gameplayer
@@ -351,7 +351,7 @@ public class SalvoController {
                 ships.stream().filter(ship -> ship.getType().equals("submarine")).count()>1 ||
                 ships.stream().filter(ship -> ship.getType().equals("destroyer")).count()>1 ||
                 ships.stream().filter(ship -> ship.getType().equals("patrolboat")).count()>1) {
-            return new ResponseEntity<>(makeMap("error", "No puedes modificar la cantidad de los barcos por partida, no te hagas el loco"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error", "You can´t change the size or quantity of ships"), HttpStatus.FORBIDDEN);
         }
 
         /* opción 2 validación individual de cantidad de barcos (tipo) por gameplayer
@@ -378,7 +378,7 @@ public class SalvoController {
         //ResponseEntity shipRelocations = new ResponseEntity<>(makeMap("error", "No puedes modificar el tamaño de los barcos, y no está permitido la manganeta ;)"), HttpStatus.FORBIDDEN);
 
         if(ships.size()!=5){
-            return new ResponseEntity<>(makeMap("error", "Faltan barcos"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error", "Ships missing"), HttpStatus.FORBIDDEN);
 
         }
 
@@ -389,7 +389,7 @@ public class SalvoController {
                     s.setGamePlayer(currentGamePlayer);
                     shipRepository.save(s);
             });
-            return new ResponseEntity<>(makeMap("OK", "Creado"), HttpStatus.CREATED);}
+            return new ResponseEntity<>(makeMap("OK", "Ships placed!"), HttpStatus.CREATED);}
 
             // Opcion 2 con For y algunas validaciones más
             /*
@@ -435,7 +435,7 @@ public class SalvoController {
             return new ResponseEntity<>(makeMap("Ships Creados para Gameplayer:", currentGamePlayer.getId()), HttpStatus.CREATED);
         }*/
         else {
-            return new ResponseEntity<>(makeMap("error", "No se crearon 5 Ships"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error", "You did not place all the ships"), HttpStatus.FORBIDDEN);
         }
 
     }
@@ -446,7 +446,7 @@ public class SalvoController {
 
         // Comprobación de autenticación
         if (isGuest(authentication)) {
-            return new ResponseEntity<>(makeMap("error", "No estás logueado"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error", "You are not logged"), HttpStatus.FORBIDDEN);
         }
 
         Player currentPlayer = playerRepository.findByUserName(authentication.getName());
@@ -454,18 +454,18 @@ public class SalvoController {
 
         // Comprobación si el usuario está ok
         if (currentPlayer == null) {
-            return new ResponseEntity<>(makeMap("error", "No estás logueado"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error", "You are not logged"), HttpStatus.FORBIDDEN);
         }
 
         // Comprobación si existe el GamePlayer
         if (!gamePlayerRepository.existsById(gamePlayerId)) {
-            return new ResponseEntity<>(makeMap("error", "No existe el GamePlayer"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error", "No such Gameplayer"), HttpStatus.FORBIDDEN);
         }
 
         GamePlayer currentGamePlayer = gamePlayerRepository.findById(gamePlayerId).get();
 
         if (currentGamePlayer.getPlayer() != currentPlayer) {
-            return new ResponseEntity<>(makeMap("error", "No tienes permiso, y no está permitido la manganeta ;)"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error", "Do not cheat"), HttpStatus.FORBIDDEN);
         }
 
         List<Map<String, Object>> listsalvoes = currentGamePlayer.getSalvos().stream()
@@ -482,7 +482,7 @@ public class SalvoController {
 
         // Comprobación de autenticación
         if (isGuest(authentication)) {
-            return new ResponseEntity<>(makeMap("error", "No estás logueado"), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(makeMap("error", "You are not logged"), HttpStatus.UNAUTHORIZED);
         }
 
         Player currentPlayer = playerRepository.findByUserName(authentication.getName());
@@ -490,24 +490,24 @@ public class SalvoController {
 
         // Comprobación si el usuario está ok
         if (currentPlayer == null) {
-            return new ResponseEntity<>(makeMap("error", "No estás logueado correctamente"), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(makeMap("error", "You are not logged"), HttpStatus.UNAUTHORIZED);
         }
 
         // Comprobación si existe el GamePlayer
         if (!gamePlayerRepository.existsById(gamePlayerId)) {
-            return new ResponseEntity<>(makeMap("error", "No existe el GamePlayer"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error", "No such Gameplayer"), HttpStatus.FORBIDDEN);
         }
 
         GamePlayer currentGamePlayer = gamePlayerRepository.findById(gamePlayerId).get();
 
         // Validación si el player no es el mismo que el gameplayer
         if (currentGamePlayer.getPlayer() != currentPlayer) {
-            return new ResponseEntity<>(makeMap("error", "No tienes permiso, y no está permitido la manganeta ;)"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error", "Do not cheat"), HttpStatus.FORBIDDEN);
         }
 
         // tiene que haber dos jugadores
         if (currentGamePlayer.getGame().getGameplayers().size()!=2){
-            return new ResponseEntity<>(makeMap("error","Para disparar debes tener un oponente"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error","You must wait until the opponent ships are placed to place salvoes"), HttpStatus.FORBIDDEN);
         }
 
         // Obtener Game Actual
@@ -526,17 +526,17 @@ public class SalvoController {
 
         // Que el jugador actual tenga los 5 barcos ubicados
         if(player1.getShips().size()!=5 || player1.getShips().size()==0){
-            return new ResponseEntity<>(makeMap("error","Player 1 debe ubicar los 5 barcos"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error","Player 1 must place ships"), HttpStatus.FORBIDDEN);
         }
 
         // Que el oponente tenga los 5 barcos ubicados
         if(player2.getShips().size()!=5 || player2.getShips().size()==0){
-            return new ResponseEntity<>(makeMap("error","Player 2 debe ubicar los 5 barcos"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error","Player 2 must place ships"), HttpStatus.FORBIDDEN);
         }
 
         // Más de un salvo y menos o igual 5
         if(!(salvo.getSalvoLocations().size()>0 && salvo.getSalvoLocations().size()<6)) {
-            return new ResponseEntity<>(makeMap("error","Tienes que realizar al menos un disparo, y no más de 5"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error","There must be between 1 and 5 shots per turn"), HttpStatus.FORBIDDEN);
         }
 
 
@@ -552,11 +552,11 @@ public class SalvoController {
         // Evita que se disparen salvos consecutivos sin que el otro jugador juegue
 
         if(player1Turns>player2Turns && currentGamePlayer.getId()==player1.getId()){
-            return new ResponseEntity<>(makeMap("error","Tienes que esperar al player 2"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error","Wait for Player 2 salvoes please"), HttpStatus.FORBIDDEN);
         }
 
         if(player1Turns==player2Turns && currentGamePlayer.getId()==player2.getId()){
-            return new ResponseEntity<>(makeMap("error","Tienes que esperar al player 1"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error","Wait for player 1 salvoes please"), HttpStatus.FORBIDDEN);
         }
 
 
@@ -567,7 +567,7 @@ public class SalvoController {
         // Salvo Constructor (GamePlayer gamePlayer, int turn, List<String> locations)
         salvoRepository.save(new Salvo(currentGamePlayer, turnoActual+1, salvo.getSalvoLocations()));
             // System.out.println("Turno de player 1 es: " + player1Turns + " y el del player 2 es: " + player2Turns );
-        return new ResponseEntity<>(makeMap("Creado", "Se agregó turno "+(turnoActual+1)+" para el jugador " + currentGamePlayer.getId()), HttpStatus.CREATED);
+        return new ResponseEntity<>(makeMap("Creado", "Fired"), HttpStatus.CREATED);
 
     }
 
