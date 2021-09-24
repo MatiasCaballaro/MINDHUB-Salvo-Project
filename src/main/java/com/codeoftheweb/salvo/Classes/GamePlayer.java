@@ -132,6 +132,7 @@ public class GamePlayer {
         return opponent;
     }
 
+/*
 
     // OBTENER SHIP LOCATIONS POR NOMBRE
     private List<String> shipLocations(String type) {
@@ -169,13 +170,17 @@ public class GamePlayer {
         //System.out.println(patrolboatLocations);
 
         // Forma 2 de obtener barcos
-        /*Ship carrier1 = this.getShips().stream().filter(sh-> sh.getType().equals("carrier")).findFirst().get();
+        */
+/*Ship carrier1 = this.getShips().stream().filter(sh-> sh.getType().equals("carrier")).findFirst().get();
         List<String> carrierlocation1 = carrier1.getShipLocations();
-        System.out.println(carrierlocation1);*/
+        System.out.println(carrierlocation1);*//*
+
 
         // Forma 3 de obtener barcos
-        /*List <String> battleship1 = this.getShips().stream().filter(sh-> sh.getType().equals("battleship")).findFirst().get().getShipLocations();
-        System.out.println(battleship1);*/
+        */
+/*List <String> battleship1 = this.getShips().stream().filter(sh-> sh.getType().equals("battleship")).findFirst().get().getShipLocations();
+        System.out.println(battleship1);*//*
+
 
 
         // Contadores de daño acumulado
@@ -283,6 +288,92 @@ public class GamePlayer {
         }
         return listHits;
     }
+*/
+
+            public List<Map<String, Object>>makeListHits(){
+                List<Map<String, Object>> listHits= new ArrayList<>();
+                Ship carrier = this.getShips().stream().filter(s -> s.getType().equals("carrier")).findFirst().get();
+                List<String> carrierLocations = carrier.getShipLocations();
+                Ship battleship = this.getShips().stream().filter(s -> s.getType().equals("battleship")).findFirst().get();
+                List<String> battleshipLocations = battleship.getShipLocations();
+                Ship submarine = this.getShips().stream().filter(s -> s.getType().equals("submarine")).findFirst().get();
+                List<String> submarineLocations = submarine.getShipLocations();
+                Ship destroyer = this.getShips().stream().filter(s -> s.getType().equals("destroyer")).findFirst().get();
+                List<String> destroyerLocations = destroyer.getShipLocations();
+                Ship patrolboat = this.getShips().stream().filter(s -> s.getType().equals("patrolboat")).findFirst().get();
+                List<String> patrolboatLocations = patrolboat.getShipLocations();
+
+                int carrierTotal = 0;
+                int battleshipTotal = 0;
+                int submarineTotal = 0;
+                int destroyerTotal = 0;
+                int patrolboatTotal = 0;
+
+                for (Salvo salvoes : this.getOpponent().getSalvos()) {
+                    Map<String, Object> hitsTurn= new LinkedHashMap<>();
+
+                    int carrierTurn = 0;
+                    int battleshipTurn = 0;
+                    int submarineTurn = 0;
+                    int destroyerTurn = 0;
+                    int patrolboatTurn = 0;
+                    int missed = salvoes.getSalvoLocations().size();
+
+                    List<String> hitLocations= new ArrayList<>();
+                    for (String salvoLocation : salvoes.getSalvoLocations()) {
+                        if (carrierLocations.contains(salvoLocation)) {
+                            hitLocations.add(salvoLocation);
+                            carrierTotal++;
+                            carrierTurn++;
+                            missed--;
+                        }
+                        if (battleshipLocations.contains(salvoLocation)) {
+                            hitLocations.add(salvoLocation);
+                            battleshipTotal++;
+                            battleshipTurn++;
+                            missed--;
+                        }
+                        if (submarineLocations.contains(salvoLocation)) {
+                            hitLocations.add(salvoLocation);
+                            submarineTotal++;
+                            submarineTurn++;
+                            missed--;
+                        }
+                        if (destroyerLocations.contains(salvoLocation)) {
+                            hitLocations.add(salvoLocation);
+                            destroyerTotal++;
+                            destroyerTurn++;
+                            missed--;
+                        }
+                        if (patrolboatLocations.contains(salvoLocation)) {
+                            hitLocations.add(salvoLocation);
+                            patrolboatTotal++;
+                            patrolboatTurn++;
+                            missed--;
+                        }
+                    }
+
+                    Map<String, Object> listDamages= new LinkedHashMap<>();
+                    listDamages.put("carrierHits", carrierTurn);
+                    listDamages.put("battleshipHits", battleshipTurn);
+                    listDamages.put("submarineHits", submarineTurn);
+                    listDamages.put("destroyerHits", destroyerTurn);
+                    listDamages.put("patrolboatHits", patrolboatTurn);
+                    listDamages.put("carrier", carrierTotal);
+                    listDamages.put("battleship", battleshipTotal);
+                    listDamages.put("submarine", submarineTotal);
+                    listDamages.put("destroyer", destroyerTotal);
+                    listDamages.put("patrolboat", patrolboatTotal);
+
+                    hitsTurn.put("turn", salvoes.getTurn());
+                    hitsTurn.put("hitLocations", hitLocations);
+                    hitsTurn.put("damages", listDamages);
+                    hitsTurn.put("missed", missed);
+
+                    listHits.add(hitsTurn);
+                }
+                return listHits;
+            }
 
 
 
@@ -473,8 +564,8 @@ public class GamePlayer {
         }
 
         else {
-            hits.put("self", this.listHits());
-            hits.put("opponent",  opponent.listHits());
+            hits.put("self", this.makeListHits());
+            hits.put("opponent",  opponent.makeListHits());
         }
 
         dto.put("hits", hits);
