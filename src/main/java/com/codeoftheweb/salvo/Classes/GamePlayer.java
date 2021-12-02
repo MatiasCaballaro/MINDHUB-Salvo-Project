@@ -552,7 +552,6 @@ public class GamePlayer {
                         .map(s -> s.makeSalvoDTO())).collect(Collectors.toList()));
 
 
-
         GamePlayer opponent = this.getOpponent();
 
         Map<String, Object> hits = new LinkedHashMap<String, Object>();
